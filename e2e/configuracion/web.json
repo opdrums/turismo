@@ -3,5 +3,7 @@
     "urlBase":  "https://dtours-touroperacion.vercel.app/es",
     "userName": "omar",
     "email": "operez@diferrent.tour",
-    "password": "Tobias_123"
+    "emailError": "noexisto@gmail.com",
+    "password": "Tobias_123", 
+    "passwordError": "892038429384092"
 }
