@@ -1,0 +1,19 @@
+{
+    "urlWeb": "https://dtours-website.vercel.app/es",
+    "email": "lmonsalve@different.tours",
+    "password": "Luisem-11",
+    "nombre": "Test 1",
+    "apellido": "QA 1",
+    "telefono": "234839383",
+    "genero": "Female",
+    "fechaCumpleaños": "1995-09-12",
+    "userEmail": "testing@gmail.com",
+    "Dni": "12345677R",
+    "fechaCaducidad": "2015-12-26",
+    "fechaExpedicion": "2040-12-26",
+    "codigoPostal": "4445566",
+    "nacionalidad": "España",
+    "cardNumber": "4513080607924968",
+    "cardExpiration": "12-13",
+    "cardCvv": "4513 0805 0123 0881"
+}
