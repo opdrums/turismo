@@ -11,7 +11,7 @@ test.describe('Como automatizador quiero crear casos de pruebas para el login', 
     })
  
     test.afterEach(async ({ page }) => {
-        await page.context().cookies(variables.urlBase);
+        await page.context().cookies(variables.urlBase)
         await page.context().clearCookies()
         await page.close()
     })
@@ -65,7 +65,7 @@ test.describe('Como automatizador quiero crear casos de pruebas para el login', 
         
         await test.step('el sistema debe mostrar un mensaje de error indicando que el usuario no existe', async () => {
             await page.getByRole('button', { name: 'Entrar'}).click()
-            let validacion = await page.locator('//html/body/div/div/div[2]/form/p').textContent();
+            let validacion = await page.locator('//html/body/div/div/div[2]/form/p').textContent()
             expect(validacion).toEqual(validacion)
         })
     })
