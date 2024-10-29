@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test'
 import * as fs from 'fs'
 
 const path = require('path');
-const configPath = path.resolve(__dirname, '../../e2e/configuracion/web.json');
+const configPath = path.resolve(__dirname, '../../e2e/configuracion/login.json');
 const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 
 test.describe('Como automatizador quiero crear casos de pruebas para el login', () => {
@@ -38,7 +38,7 @@ test.describe('Como automatizador quiero crear casos de pruebas para el login', 
         await test.step('el sistema debe mostrar un mensaje de error indicando que el usuario ingreso mal la contraseña', async () => {
             await page.getByRole('button', { name: 'Entrar'}).click()
             let validacion = await page.locator('//html/body/div/div/div[2]/form/p').textContent();
-            expect(validacion).toEqual(validacion)
+            expect(validacion).toBe('Usuario o contraseña incorrectos.')
         })
     })
 
@@ -52,8 +52,10 @@ test.describe('Como automatizador quiero crear casos de pruebas para el login', 
         
         await test.step('el sistema debe mostrar un mensaje de advertencia indicando que los campos son obligatorios', async () => {
             await page.getByRole('button', { name: 'Entrar'}).click()
-            expect(page.getByText('El nombre de usuario es')).toContainText('El nombre de usuario es')
-            expect(page.getByText('La contraseña es obligatoria.')).toContainText('La contraseña es obligatoria.')
+            let campoVacioUsuario = await page.locator('//html/body/div/div/div[2]/form/div[1]/p').textContent()
+            let campoVacioContraseña = await page.locator('//html/body/div/div/div[2]/form/div[2]/p').textContent()
+            expect(campoVacioUsuario).toBe('El nombre de usuario es obligatorio.')
+            expect(campoVacioContraseña).toBe('La contraseña es obligatoria.')
         })  
     })
 
@@ -66,7 +68,7 @@ test.describe('Como automatizador quiero crear casos de pruebas para el login', 
         await test.step('el sistema debe mostrar un mensaje de error indicando que el usuario no existe', async () => {
             await page.getByRole('button', { name: 'Entrar'}).click()
             let validacion = await page.locator('//html/body/div/div/div[2]/form/p').textContent()
-            expect(validacion).toEqual(validacion)
+            expect(validacion).toBe('Usuario o contraseña incorrectos.')
         })
     })
 })
