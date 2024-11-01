@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test'
 import * as fs from 'fs'
 
 const path = require('path');
-const configPath = path.resolve(__dirname, '../../e2e/configuracion/login.json');
+const configPath = path.resolve(__dirname, '../../e2e/configuracion/tour_operacion/login.json');
 const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 
 test.describe('Como automatizador quiero crear casos de pruebas para el login', () => {
@@ -43,7 +43,7 @@ test.describe('Como automatizador quiero crear casos de pruebas para el login', 
     })
 
     test('Inicio de Sesión con Campos Vacíos', async ({ page }) => {
-        await test.step('Dado que el usuario no ingresa las crdenciales', async () => {
+        await test.step('Dado que el usuario no ingresa las credenciales', async () => {
             await page.locator('#user').fill(variables.userName)
             await page.locator('#user').clear()
             await page.locator('#password').fill(variables.password)

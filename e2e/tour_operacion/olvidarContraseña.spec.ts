@@ -3,7 +3,7 @@ const { chromium } = require('playwright');
 import * as fs from 'fs'
 
 const path = require('path');
-const configPath = path.resolve(__dirname, '../../e2e/configuracion/olvidarContraseña.json');
+const configPath = path.resolve(__dirname, '../../e2e/configuracion/tour_operacion/olvidarContraseña.json');
 const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'))
 
 test.describe('Como automatizador quiero crear casos de olvidar contraseña', () => {
