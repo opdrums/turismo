@@ -51,7 +51,19 @@ test.describe('Como automatizador, quiero realizar el flujo de inicio de session
             expect(page.getByText('El nombre de usuario es')).toContainText('El nombre de usuario es obligatorio.')
             expect(page.getByText('La contraseña es obligatoria.')).toContainText('La contraseña es obligatoria.')
         })
-        
+    })
+    
+    test('Mostrar validacion de usuario no ha confirmado su registro.', async ({ page }) => {
+        await test.step('Dado que el usuario no ingresa las credenciales', async () => {
+            await page.getByPlaceholder('E-mail').fill(variables.usuarioSinRegistrar);
+            await page.getByPlaceholder('Contraseña').fill(variables.passwordWeb);
+            await page.getByRole('button', { name: 'Continuar' }).click();
+        })
+
+        await test.step('el sistema debe mostrar un mensaje de advertencia indicando usuario no ha confirmado', async () => {
+            await page.getByText('El usuario no ha confirmado').waitFor({state: 'visible'})
+            expect(page.getByText('El usuario no ha confirmado')).toContainText('El usuario no ha confirmado el código de verificación.')
+        })
     })
     
 })

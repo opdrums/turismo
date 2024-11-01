@@ -2,5 +2,6 @@
     "urlWeb": "https://dtours-website.vercel.app/es",
     "emailWeb": "operez@different.tours",
     "passwordWeb": "T2*tobias",
-    "passwordError": "892038429384092"
+    "passwordError": "892038429384092",
+    "usuarioSinRegistrar": "operez+01"
 }
