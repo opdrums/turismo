@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test'
 const { chromium } = require('playwright');
 import * as fs from 'fs'
-import olvidarContraseña from '../comandos/tour/olvidarContraseña';
+import olvidarContraseña from '../comandos/tour_operacion/olvidarContraseña';
 
 const path = require('path');
 const configPath = path.resolve(__dirname, '../../e2e/configuracion/tour_operacion/olvidarContraseña.json');
