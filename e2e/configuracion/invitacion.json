@@ -1,7 +1,9 @@
 {
     "urlWeb": "https://dtours-website.vercel.app/es",
-    "urlBase":  "https://dtours-touroperacion.vercel.app/es",
+    "urlBase": "https://dtours-touroperacion.vercel.app/es",
+    "urlMail":"https://mail.tm/en/",
     "userName": "admin.usuario",
     "email": "fawom70711@angewy.com",
-    "password": "Different-123"
+    "password": "Different-123",
+    "roles": ["Admin de Contenidos","Admin de Tours","Admin de Usuarios","Retailer","Guía"]
 }
