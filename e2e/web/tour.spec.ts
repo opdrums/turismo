@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test'
 import * as fs from 'fs'
 
 const path = require('path');
-const configPath = path.resolve(__dirname, '../../e2e/configuracion/compras.json');
+const configPath = path.resolve(__dirname, '../../e2e/configuracion/web/compras.json');
 const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 
 test.describe('Como automatizador, quiero realizar el flujo de compra de un tour', () => {
