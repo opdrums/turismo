@@ -9,7 +9,7 @@ test.describe('Como automatizador, quiero realizar el flujo de compra de un tour
 
     test.beforeEach(async ({ page }) => {
         await page.goto(variables.urlWeb);
-        await page.getByRole('link', { name: 'SIGN IN' }).click();
+        await page.getByRole('link', { name: 'Iniciar sesión' }).click();
         await page.getByPlaceholder('E-mail').fill(variables.email);
         await page.getByPlaceholder('Contraseña').fill(variables.password);
         await page.getByRole('button', { name: 'Continuar' }).click();

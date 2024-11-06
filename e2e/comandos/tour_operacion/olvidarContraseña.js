@@ -1,4 +1,3 @@
-
 export class olvidarContraseña {
   constructor(page) {
     this.page = page

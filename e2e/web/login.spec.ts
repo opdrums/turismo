@@ -8,7 +8,7 @@ const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 test.describe('Como automatizador, quiero realizar el flujo de inicio de session', () => {
     test.beforeEach(async ({ page }) => {
         await page.goto(variables.urlWeb);
-        await page.getByRole('link', { name: 'SIGN IN' }).click();
+        await page.getByRole('link', { name: 'Iniciar sesión' }).click();
     })
 
     test.afterEach(async ({ page }) => {
