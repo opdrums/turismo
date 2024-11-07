@@ -2,14 +2,14 @@ import { expect, test } from '@playwright/test'
 import * as fs from 'fs'
 
 const path = require('path');
-const configPath = path.resolve(__dirname, '../../e2e/configuracion/compras.json');
+const configPath = path.resolve(__dirname, '../../e2e/configuracion/web/compras.json');
 const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 
 test.describe('Como automatizador, quiero realizar el flujo de compra de un tour', () => {
 
     test.beforeEach(async ({ page }) => {
         await page.goto(variables.urlWeb);
-        await page.getByRole('link', { name: 'SIGN IN' }).click();
+        await page.getByRole('link', { name: 'Iniciar sesión' }).click();
         await page.getByPlaceholder('E-mail').fill(variables.email);
         await page.getByPlaceholder('Contraseña').fill(variables.password);
         await page.getByRole('button', { name: 'Continuar' }).click();
@@ -25,9 +25,9 @@ test.describe('Como automatizador, quiero realizar el flujo de compra de un tour
 
         await test.step('Iniciar el proceso de compra de un tour', async () => {
             await page.getByRole('link', { name: 'Ver tour' }).nth(2).click()
-            await page.getByRole('button', { name: 'Seleccionar' }).scrollIntoViewIfNeeded()
-            await page.getByRole('button', { name: 'Seleccionar' }).hover()
-            await page.getByRole('button', { name: 'Seleccionar' }).click()
+            await page.getByRole('button', { name: 'Seleccionar' }).first().scrollIntoViewIfNeeded()
+            await page.getByRole('button', { name: 'Seleccionar' }).first().hover()
+            await page.getByRole('button', { name: 'Seleccionar' }).first().click()
             await page.locator('//div[1]/div[3]/div[1]/button/span').first().waitFor({ state: 'visible' })
         });
 
@@ -91,7 +91,7 @@ test.describe('Como automatizador, quiero realizar el flujo de compra de un tour
             await page.locator('//*[@id="body"]/div[2]/div[2]/div[1]/input[2]').waitFor({ state: 'visible' })
             let validateText = page.locator('//*[@id="result-header"]/div/div/text').textContent()
             expect(validateText).toEqual(validateText)
-        });
-    });
-});
+        })
+    })
+})
 
