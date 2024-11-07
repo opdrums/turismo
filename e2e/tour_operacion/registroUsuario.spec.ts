@@ -17,7 +17,7 @@ test.describe('como automatizador quiero validar el flujo de registro', () => {
     })
 
     test('registro exito', async () => {
-        const isHeadless = !!process.env.CI;
+        const isHeadless = !!process.env.CI
         const browser = await chromium.launch({ headless: isHeadless })
         const context = await browser.newContext()
         const view1 = await context.newPage()

@@ -19,7 +19,7 @@ test.describe('Como automatizador quiero hacer el flujo de inivitaciones', () =>
 
     for(const rol of variables.roles){
         test(`Enviar invitaciones ${rol}`, async ({}, testInfo) => {
-            const isHeadless = !!process.env.CI;
+            const isHeadless = !!process.env.CI
             const browser = await chromium.launch({ headless: isHeadless })
             
             const context = await browser.newContext()
