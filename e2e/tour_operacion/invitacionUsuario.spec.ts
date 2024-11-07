@@ -8,6 +8,8 @@ const configPath = path.resolve(__dirname, '../../e2e/configuracion/tour_operaci
 const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 let invitacion = new invitacionUsuario()
 
+const isHeadless = !!process.env.CI;
+
 test.describe('Como automatizador quiero hacer el flujo de inivitaciones', () => {
     test.afterEach(async ({ page }) => {
         await page.context().cookies(variables.urlBase)
@@ -17,7 +19,9 @@ test.describe('Como automatizador quiero hacer el flujo de inivitaciones', () =>
 
     for(const rol of variables.roles){
         test(`Enviar invitaciones ${rol}`, async ({}, testInfo) => {
-            const browser = await chromium.launch({ headless: false }) 
+            const isHeadless = !!process.env.CI;
+            const browser = await chromium.launch({ headless: isHeadless })
+            
             const context = await browser.newContext()
             const view1 = await context.newPage()
             const view2 = await context.newPage()
