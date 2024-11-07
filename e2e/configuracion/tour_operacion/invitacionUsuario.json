@@ -1,8 +1,13 @@
 {
     "urlBase": "https://dtours-touroperacion.vercel.app/es",
     "urlMail":"https://mail.tm/en/",
+    "urltemporal": "https://dtours-touroperacion.vercel.app/es/invite-user/672d05ee77742b82a99329ae",
     "userName": "admin.usuario",
     "email": "fawom70711@angewy.com",
     "password": "Different-123",
-    "roles": ["Admin de Contenidos","Admin de Tours","Admin de Usuarios","Retailer","Guía"]
+    "passwordError": "Different-123a",
+    "roles": ["Admin de Contenidos","Admin de Tours","Admin de Usuarios","Retailer","Guía"],
+    "usuario": "omar",
+    "nombre": "carlos", 
+    "apellido": "perez"
 }

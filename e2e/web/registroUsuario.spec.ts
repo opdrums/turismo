@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test'
 const { chromium } = require('playwright');
 import * as fs from 'fs'
-import codigoVerificacionRegistro from '../comandos/web/codigoVerificacionRegistro';
+import codigoVerificacionRegistro from '../pageObjectModel/web/codigoVerificacionRegistro';
 
 const path = require('path');
 const configPath = path.resolve(__dirname, '../../e2e/configuracion/web/registroUsuario.json')
@@ -50,20 +50,20 @@ test.describe('como automatizador quiero validar el flujo de registro de usuario
             await view1.getByPlaceholder('Código de confirmación').clear()
             await view1.getByPlaceholder('Código de confirmación').fill(codigos.codigoVerificacion) // Utiliza el código de confirmación obtenido
             await view1.getByRole('button', { name: 'Verificar código' }).click()
-        });
+        })
     
         await test.step('Validar redirección a la vista de compras de tours', async () => {
             await view1.getByRole('link', { name: codigos.correoprovicional }).waitFor({ state: 'visible' })
             expect(view1.getByRole('link', { name: codigos.correoprovicional })).toBeVisible()
-        });
-    });
+        })
+    })
     
 
     test('Mostrar validacion de Campos vacíos y obligatorios', async ({ page }) => {
         await test.step('El usuario intenta registrarse sin completar los campos y hace clic en "Continuar"', async () => {
             const codigoPage = new codigoVerificacionRegistro(page)
             await codigoPage.flujoRegistro(variables.urlBase)
-        });
+        })
     
         await test.step('El sistema muestra mensajes indicando los campos obligatorios que están vacíos', async () => {
             expect(page.getByText('El correo electrónico es')).toContainText('El correo electrónico es obligatorio.')
@@ -72,8 +72,8 @@ test.describe('como automatizador quiero validar el flujo de registro de usuario
             expect(page.getByText('El nombre es obligatorio.')).toContainText('El nombre es obligatorio.')
             expect(page.getByText('El apellido es obligatorio.')).toContainText('El apellido es obligatorio.')
             expect(page.getByText('El teléfono es obligatorio.')).toContainText('El teléfono es obligatorio.')
-        });
-    });
+        })
+    })
     
     test('Mostrar validación de requisitos para el campo de contraseña', async ({ page }) => {
         await test.step('El usuario intenta registrarse ingresando una contraseña no válida y hace clic en "Continuar"', async () => {
@@ -134,6 +134,6 @@ test.describe('como automatizador quiero validar el flujo de registro de usuario
             await page.getByRole('button', { name: 'Continuar' }).click()
             await page.getByText('User already exists').waitFor({ state: 'visible' })
             expect(page.getByText('User already exists')).toContainText('User already exists')
-        });
-    });  
+        })
+    })
 })

@@ -8,7 +8,7 @@ export class invitacionUsuario {
 
     async abrirVistas(view1, view2, variables) {
         view1.setDefaultTimeout(120000)
-        view2.setDefaultTimeout(120000)
+        view2.setDefaultTimeout(230000)
     
         await Promise.all([
           view1.goto(variables.urlBase),
@@ -56,7 +56,7 @@ export class invitacionUsuario {
         await view2.close()
     }
 
-    async validarTituloRegistroUsuario( context){
+    async validarTituloRegistroUsuario(context){
         const [view3] = await Promise.all([
             context.waitForEvent('page'), 
         ])
@@ -64,6 +64,27 @@ export class invitacionUsuario {
         await view3.getByRole('heading', { name: 'Completa tu registro' }).waitFor({ state: 'visible' })
         const tituloVisible = await view3.locator('//html/body/div[1]/div/div/div[1]/h1').textContent()
         expect(tituloVisible).toBe('Completa tu registro')
+    }
+
+
+    async regististroUsuario(context, variables){
+        const nombres = ["Juan", "Ana", "Carlos", "Maria", "Luis", "Sofia", "Miguel", "Elena"]
+        const nombreAleatorio = nombres[Math.floor(Math.random() * nombres.length)]
+        const numeroAleatorio = Math.floor(1000 + Math.random() * 9000);
+
+        const [view3] = await Promise.all([
+            context.waitForEvent('page'), 
+        ])
+
+        await view3.getByRole('heading', { name: 'Completa tu registro' }).waitFor({ state: 'visible' })
+        await view3.getByPlaceholder('Usuario').fill(`${nombreAleatorio}${numeroAleatorio}`)
+        await view3.getByPlaceholder('Nombre').fill(variables.nombre)
+        await view3.getByPlaceholder('Contraseña', { exact: true }).fill(variables.password)
+        await view3.getByPlaceholder('Apellido').fill(variables.apellido)
+        await view3.getByPlaceholder('Confirmar contraseña').fill(variables.password)
+        await view3.getByRole('button', { name: 'Completar registro' }).click()
+        await view3.getByText('Se ha enviado un código a tu').waitFor({state: 'visible'})
+        expect(view3.getByText('Se ha enviado un código a tu')).toBeVisible()
     }
 
     async iniciarSessionInvitacion(url, userName, password){

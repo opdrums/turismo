@@ -16,7 +16,7 @@ export class codigoVerificacionRegistro {
   }
 
   async navegarRegistro(view1) {
-    await view1.getByRole('link', { name: 'SIGN IN' }).click()
+    await view1.getByRole('link', { name: 'Iniciar sesión' }).click()
     await view1.getByRole('link', { name: '¿Aun no tienes cuenta?' }).click()
     await view1.waitForTimeout(2000)
   }
@@ -39,6 +39,8 @@ export class codigoVerificacionRegistro {
   }
 
   async obtenerCodigoConfirmacion(view2) {
+    await view2.waitForTimeout(2000)
+    await view2.getByRole('link', { name: 'Refresh' }).click()
     await view2.getByRole('link', { name: 'I info@differentroads.es' }).waitFor({ state: 'visible' })
     await view2.getByRole('link', { name: 'I info@differentroads.es' }).click()
     await view2.evaluate(() => location.reload())
@@ -58,7 +60,7 @@ export class codigoVerificacionRegistro {
 
   async flujoRegistro(url) {
     await this.page.goto(url);
-    await this.page.getByRole('link', { name: 'SIGN IN' }).click()
+    await this.page.getByRole('link', { name: 'Iniciar sesión' }).click()
     await this.page.getByRole('link', { name: '¿Aun no tienes cuenta?' }).click()
     await this.page.getByPlaceholder('Telefono').waitFor({ state: 'visible' })
     await this.page.getByRole('button', { name: 'Continuar' }).click()

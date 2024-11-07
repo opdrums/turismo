@@ -1,15 +1,14 @@
 import {  expect,test } from "@playwright/test";
 const { chromium } = require('playwright');
 import * as fs from 'fs'
-import invitacionUsuario from '../../e2e/comandos/tour_operacion/invitacionUsuario'
+import invitacionUsuario from '../pageObjectModel/tour_operacion/invitacionUsuario'
 
 const path = require('path');
 const configPath = path.resolve(__dirname, '../../e2e/configuracion/tour_operacion/invitacionUsuario.json');
 const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 let invitacion = new invitacionUsuario()
 
-test.describe('Automatizacion invitacion de usuarios', () => {
-    test.describe.configure({ mode: 'serial' })
+test.describe('Como automatizador quiero hacer el flujo de inivitaciones', () => {
     test.afterEach(async ({ page }) => {
         await page.context().cookies(variables.urlBase)
         await page.context().clearCookies()
