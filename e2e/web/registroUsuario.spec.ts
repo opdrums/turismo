@@ -1,11 +1,12 @@
 import { expect, test } from '@playwright/test'
-const { chromium } = require('playwright');
+import codigoVerificacionRegistro from '../pageObjectModel/web/codigoVerificacionRegistro'
 import * as fs from 'fs'
-import codigoVerificacionRegistro from '../pageObjectModel/web/codigoVerificacionRegistro';
 
-const path = require('path');
+
+const path = require('path')
+const { chromium } = require('playwright')
 const configPath = path.resolve(__dirname, '../../e2e/configuracion/web/registroUsuario.json')
-const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'))
 const codigos = new codigoVerificacionRegistro()
 
 test.describe('como automatizador quiero validar el flujo de registro de usuario', () => {    
@@ -16,7 +17,8 @@ test.describe('como automatizador quiero validar el flujo de registro de usuario
     })
 
     test('Registro de usuario exitoso', async ({}) => {
-        const browser = await chromium.launch({ headless: false })
+        const isHeadless = !!process.env.CI
+        const browser = await chromium.launch({ headless: isHeadless })
         const context = await browser.newContext()
         const view1 = await context.newPage()
         const view2 = await context.newPage()

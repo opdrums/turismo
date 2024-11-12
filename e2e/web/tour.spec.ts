@@ -1,18 +1,17 @@
 import { expect, test } from '@playwright/test'
+import compraTour from '../pageObjectModel/web/compraTour'
 import * as fs from 'fs'
 
-const path = require('path');
-const configPath = path.resolve(__dirname, '../../e2e/configuracion/web/compras.json');
-const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+const path = require('path')
+const configPath = path.resolve(__dirname, '../../e2e/configuracion/web/compras.json')
+const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'))
 
-test.describe('Como automatizador, quiero realizar el flujo de compra de un tour', () => {
+
+test.describe('Como automatizador, quiero realizar el flujos de compra de un tour', () => {
 
     test.beforeEach(async ({ page }) => {
-        await page.goto(variables.urlWeb);
-        await page.getByRole('link', { name: 'Iniciar sesión' }).click();
-        await page.getByPlaceholder('E-mail').fill(variables.email);
-        await page.getByPlaceholder('Contraseña').fill(variables.password);
-        await page.getByRole('button', { name: 'Continuar' }).click();
+        const compra = new compraTour(page)
+        await compra.loginUser(variables.urlWeb, variables.email, variables.password)
     });
 
     test.afterEach(async ({ page }) => {
@@ -21,76 +20,132 @@ test.describe('Como automatizador, quiero realizar el flujo de compra de un tour
         await page.close()
     })
 
-    test('Automatización del flujo de compra con el plan Comfort', async ({ page }) => {
+    test('Flujo de compra para el plan Comfort con pago mediante transferencia bancaria', async ({ page }) => {
+        const compra = new compraTour(page);
+    
+        await test.step('Seleccionar el tour y el período deseado', async () => {
+            await compra.seleccionarTouraAndPeriodo(2);
+        })
+    
+        await test.step('Completar el formulario de pasajeros - Paso 1', async () => {
+            await compra.seleccionarCantidadHabitaciones();
+            await compra.FormularioPasajeros(0, variables.nombre, variables.apellido, variables.telefono, variables.genero, variables.fechaCumpleaños, variables.userEmail, variables.Dni, variables.fechaCaducidad, variables.fechaExpedicion, variables.codigoPostal, variables.nacionalidad);
+            await compra.FormularioPasajeros(1, variables.nombre, variables.apellido, variables.telefono, variables.genero, variables.fechaCumpleaños, variables.userEmail, variables.Dni, variables.fechaCaducidad, variables.fechaExpedicion, variables.codigoPostal, variables.nacionalidad);
+        })
+    
+        await test.step('Seleccionar actividades y plan Comfort - Paso 2', async () => {
+            await compra.agregarActividad();
+            await compra.selecionarPlanComfort();
+        })
+    
+        await test.step('Realizar el pago total mediante transferencia bancaria - Paso 3', async () => {
+            await compra.pagoTotalTransferenciaBancaria();
+        })
+    
+        await test.step('Validar estado de la compra exitosa mediante transferencia bancaria', async () => {
+            await compra.pagoTransferencia();
+        })
+    })
+    
+    test('Flujo de compra para el plan Standard con pago mediante tarjeta', async ({ page }) => {
+        const compra = new compraTour(page);
+    
+        await test.step('Seleccionar el tour y el período deseado', async () => {
+            await compra.seleccionarTouraAndPeriodo(2);
+        })
+    
+        await test.step('Completar el formulario de pasajeros - Paso 1', async () => {
+            await compra.seleccionarCantidadHabitaciones();
+            await compra.FormularioPasajeros(0, variables.nombre, variables.apellido, variables.telefono, variables.genero, variables.fechaCumpleaños, variables.userEmail, variables.Dni, variables.fechaCaducidad, variables.fechaExpedicion, variables.codigoPostal, variables.nacionalidad);
+            await compra.FormularioPasajeros(1, variables.nombre, variables.apellido, variables.telefono, variables.genero, variables.fechaCumpleaños, variables.userEmail, variables.Dni, variables.fechaCaducidad, variables.fechaExpedicion, variables.codigoPostal, variables.nacionalidad);
+        })
+    
+        await test.step('Seleccionar actividades y plan Standard - Paso 2', async () => {
+            await compra.agregarActividad();
+            await compra.selecionarPlanStandard();
+        })
+    
+        await test.step('Realizar el pago total con tarjeta - Paso 3', async () => {
+            await compra.pagoTotalConTarjeta();
+        })
+    
+        await test.step('Validar estado de la compra exitosa', async () => {
+            await compra.pagoExitoso();
+        })
+    })
+    
+    test('Flujo de compra para el plan Comfort Plus con pago de reserva', async ({ page }) => {
+        const compra = new compraTour(page);
+    
+        await test.step('Seleccionar el tour y el período', async () => {
+            await compra.seleccionarTouraAndPeriodo(2);
+        })
+    
+        await test.step('Completar el formulario de pasajeros - Paso 1', async () => {
+            await compra.seleccionarCantidadHabitaciones();
+            await compra.FormularioPasajeros(0, variables.nombre, variables.apellido, variables.telefono, variables.genero, variables.fechaCumpleaños, variables.userEmail, variables.Dni, variables.fechaCaducidad, variables.fechaExpedicion, variables.codigoPostal, variables.nacionalidad);
+            await compra.FormularioPasajeros(1, variables.nombre, variables.apellido, variables.telefono, variables.genero, variables.fechaCumpleaños, variables.userEmail, variables.Dni, variables.fechaCaducidad, variables.fechaExpedicion, variables.codigoPostal, variables.nacionalidad);
+        })
+    
+        await test.step('Seleccionar actividades y plan Comfort Plus - Paso 2', async () => {
+            await compra.agregarActividad();
+            await compra.selecionarPlanComfortPlus();
+        })
+    
+        await test.step('Realizar el pago de reserva con Bizum - Paso 3', async () => {
+            await compra.pagoReservaTiempoBizum();
+        })
+    
+        await test.step('Validar estado de la compra exitosa', async () => {
+            await compra.pagoExitoso();
+        })
+    })
+    
 
-        await test.step('Iniciar el proceso de compra de un tour', async () => {
-            await page.getByRole('link', { name: 'Ver tour' }).nth(2).click()
-            await page.getByRole('button', { name: 'Seleccionar' }).first().scrollIntoViewIfNeeded()
-            await page.getByRole('button', { name: 'Seleccionar' }).first().hover()
-            await page.getByRole('button', { name: 'Seleccionar' }).first().click()
-            await page.locator('//div[1]/div[3]/div[1]/button/span').first().waitFor({ state: 'visible' })
-        });
+    test('Validación de formulario: campos vacíos durante el proceso de compra', async ({ page }) => {
+        const compra = new compraTour(page)
+    
+        await test.step('Iniciar el proceso de compra seleccionando un tour y período', async () => {
+            await compra.seleccionarTouraAndPeriodo(2);
+        })
+    
+        await test.step('Seleccionar cantidad de habitaciones y continuar al siguiente paso', async () => {
+            await compra.seleccionarCantidadHabitaciones();
+            await page.getByRole('button', { name: 'Continuar' }).click();
+        })
+    
+        await test.step('Verificar mensajes de error para campos obligatorios vacíos', async () => {
+            await expect(page.getByText('El nombre es obligatorio').first()).toHaveText('El nombre es obligatorio');
+            await expect(page.getByText('El apellido es obligatorio').first()).toHaveText('El apellido es obligatorio');
+            await expect(page.getByText('El teléfono es obligatorio').first()).toHaveText('El teléfono es obligatorio');
+            await expect(page.getByText('Selecciona el sexo').first()).toHaveText('Selecciona el sexo');
+            await expect(page.getByText('La fecha de nacimiento es obligatoria').first()).toHaveText('La fecha de nacimiento es obligatoria');
+            await expect(page.getByText('El correo electrónico es obligatorio').first()).toHaveText('El correo electrónico es obligatorio');
+            await expect(page.getByText('El DNI es obligatorio').first()).toHaveText('El DNI es obligatorio');
+            await expect(page.getByText('El código postal es obligatorio').first()).toHaveText('El código postal es obligatorio');
+            await expect(page.getByText('Selecciona la nacionalidad').first()).toHaveText('Selecciona la nacionalidad');
+        })
+    })
 
-        await test.step('Seleccionar la cantidad de pasajeros y el tipo de habitación', async () => {
-            await page.locator('div').filter({ hasText: /^Adultos\(Desde 12 años\)\+-$/ }).getByRole('button').nth(1).click()
-            await page.locator('div').filter({ hasText: /^Doble matrimonio1 cama doble\+-$/ }).getByRole('button').nth(1).click()
-        });
-
-        await test.step('Completar los datos del pasajero 1 en el formulario', async () => {
-            await page.getByLabel('Nombre*').nth(0).fill(variables.nombre)
-            await page.getByLabel('Apellido*').nth(0).fill(variables.apellido)
-            await page.getByLabel('Teléfono*').nth(0).fill(variables.telefono)
-            await page.selectOption('#reservation-field-sex', variables.genero)
-            await page.getByLabel('Fecha de nacimiento*').nth(0).fill(variables.fechaCumpleaños)
-            await page.getByLabel('E-mail*').nth(0).fill(variables.userEmail)
-            await page.getByLabel('Confirmar e-mail').check()
-            await page.getByLabel('DNI*').nth(0).fill(variables.Dni);
-            await page.getByLabel('Fecha de caducidad').nth(0).fill(variables.fechaCaducidad)
-            await page.getByLabel('Fecha de expedición').nth(0).fill(variables.fechaExpedicion)
-            await page.getByLabel('Código postal').nth(0).fill(variables.codigoPostal)
-            await page.selectOption('#reservation-field-nationality', variables.nacionalidad)
-        });
-
-        await test.step('Completar los datos del pasajero 2 en el formulario', async () => {
-            await page.getByRole('textbox', { name: 'Introduce nombre' }).fill(variables.nombre)
-            await page.getByRole('textbox', { name: 'Introduce apellido' }).fill(variables.apellido)
-            await page.getByRole('textbox', { name: 'Introduce teléfono' }).fill(variables.telefono)
-            await page.locator('#reservation-field-sex').nth(1).selectOption(variables.genero)
-            await page.locator('#reservation-field-birthday').nth(1).fill(variables.fechaCumpleaños)
-            await page.getByRole('textbox', { name: 'Introduce e-mail' }).fill(variables.userEmail)
-            await page.locator('#reservation-field-confirm-email').nth(1).check()
-            await page.getByRole('textbox', { name: 'Introduce DNI' }).fill(variables.Dni)
-            await page.locator('#reservation-field-expiration').nth(1).fill(variables.fechaCaducidad)
-            await page.locator('#reservation-field-issued').nth(1).fill(variables.fechaExpedicion)
-            await page.getByRole('textbox', { name: 'Introduce C.P' }).fill(variables.codigoPostal)
-            await page.locator('#reservation-field-nationality').nth(1).selectOption(variables.nacionalidad)
-        });
-
-        await test.step('Continuar al siguiente paso del proceso de compra', async () => {
-            await page.getByRole('button', { name: 'Continuar' }).click()
-        });
-
-        await test.step('Seleccionar el plan Comfort', async () => {
-            await page.locator('//div[1]/div[3]/div[2]/div/div/div/div[2]/div[3]/div[2]').click();
-            await page.getByRole('button', { name: 'Continuar' }).click()
-        });
-
-        await test.step('Realizar la selección de pago', async () => {
-            await page.getByRole('button', { name: 'Paga tu viaje al completo 1.' }).click()
-            await page.getByRole('button', { name: 'Tarjeta bancaria' }).click()
-            await page.getByLabel('Acepto términos de privacidad').check()
-            await page.getByRole('button', { name: 'Realizar pago' }).click()
-        });
-
-        await test.step('Completar los detalles de la pasarela de pago', async () => {
-            await page.locator('//*[@id="divImgAceptar"]').waitFor({ state: 'visible' })
-            await page.locator('#card-number').fill(variables.cardNumber)
-            await page.locator('#card-expiration').fill(variables.cardExpiration)
-            await page.locator('#card-cvv').fill(variables.cardCvv)
-            await page.locator('#divImgAceptar').click()
-            await page.locator('//*[@id="body"]/div[2]/div[2]/div[1]/input[2]').waitFor({ state: 'visible' })
-            let validateText = page.locator('//*[@id="result-header"]/div/div/text').textContent()
-            expect(validateText).toEqual(validateText)
+    test('Validación de formulario: fechas inválidas en el proceso de compra', async ({ page }) => {
+        const compra = new compraTour(page)
+    
+        await test.step('Iniciar el proceso de compra seleccionando un tour y período', async () => {
+            await compra.seleccionarTouraAndPeriodo(2);
+        })
+    
+        await test.step('Seleccionar cantidad de habitaciones y completar fechas inválidas en el formulario', async () => {
+            await compra.seleccionarCantidadHabitaciones();
+            await page.locator('//*[@id="reservation-field-birthday"]').nth(0).fill('2100-12-05'); // Fecha futura para nacimiento
+            await page.locator('//*[@id="reservation-field-expiration"]').nth(0).fill('1995-11-12'); // Fecha pasada para caducidad
+            await page.locator('//*[@id="reservation-field-issued"]').nth(0).fill('2100-12-05'); // Fecha futura para expedición
+            await page.getByRole('button', { name: 'Continuar' }).click();
+        })
+    
+        await test.step('Verificar mensajes de error para fechas no válidas', async () => {
+            await expect(page.getByText('La fecha de nacimiento no puede ser futura').first()).toHaveText('La fecha de nacimiento no puede ser futura');
+            await expect(page.getByText('La fecha de caducidad no puede estar en el pasado').first()).toHaveText('La fecha de caducidad no puede estar en el pasado');
+            await expect(page.getByText('La fecha de expedición no puede ser futura').first()).toHaveText('La fecha de expedición no puede ser futura');
         })
     })
 })
