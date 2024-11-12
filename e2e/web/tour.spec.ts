@@ -15,89 +15,89 @@ test.describe('Como automatizador, quiero realizar el flujos de compra de un tou
     });
 
     test.afterEach(async ({ page }) => {
-        await page.context().cookies(variables.urlWeb);
+        await page.context().cookies(variables.urlWeb)
         await page.context().clearCookies()
         await page.close()
     })
 
     test('Flujo de compra para el plan Comfort con pago mediante transferencia bancaria', async ({ page }) => {
-        const compra = new compraTour(page);
+        const compra = new compraTour(page)
     
         await test.step('Seleccionar el tour y el período deseado', async () => {
-            await compra.seleccionarTouraAndPeriodo(2);
+            await compra.seleccionarTouraAndPeriodo(2)
         })
     
         await test.step('Completar el formulario de pasajeros - Paso 1', async () => {
             await compra.seleccionarCantidadHabitaciones();
-            await compra.FormularioPasajeros(0, variables.nombre, variables.apellido, variables.telefono, variables.genero, variables.fechaCumpleaños, variables.userEmail, variables.Dni, variables.fechaCaducidad, variables.fechaExpedicion, variables.codigoPostal, variables.nacionalidad);
-            await compra.FormularioPasajeros(1, variables.nombre, variables.apellido, variables.telefono, variables.genero, variables.fechaCumpleaños, variables.userEmail, variables.Dni, variables.fechaCaducidad, variables.fechaExpedicion, variables.codigoPostal, variables.nacionalidad);
+            await compra.FormularioPasajeros(0, variables.apellido, variables.telefono, variables.genero, variables.fechaCumpleaños, variables.fechaCaducidad, variables.fechaExpedicion, variables.codigoPostal, variables.nacionalidad)
+            await compra.FormularioPasajeros(1, variables.apellido, variables.telefono, variables.genero, variables.fechaCumpleaños, variables.fechaCaducidad, variables.fechaExpedicion, variables.codigoPostal, variables.nacionalidad)
         })
     
         await test.step('Seleccionar actividades y plan Comfort - Paso 2', async () => {
-            await compra.agregarActividad();
-            await compra.selecionarPlanComfort();
+            await compra.agregarActividad()
+            await compra.selecionarPlanComfort()
         })
     
         await test.step('Realizar el pago total mediante transferencia bancaria - Paso 3', async () => {
-            await compra.pagoTotalTransferenciaBancaria();
+            await compra.pagoTotalTransferenciaBancaria()
         })
     
         await test.step('Validar estado de la compra exitosa mediante transferencia bancaria', async () => {
-            await compra.pagoTransferencia();
+            await compra.pagoTransferencia()
         })
     })
     
     test('Flujo de compra para el plan Standard con pago mediante tarjeta', async ({ page }) => {
-        const compra = new compraTour(page);
+        const compra = new compraTour(page)
     
         await test.step('Seleccionar el tour y el período deseado', async () => {
-            await compra.seleccionarTouraAndPeriodo(2);
+            await compra.seleccionarTouraAndPeriodo(2)
         })
     
         await test.step('Completar el formulario de pasajeros - Paso 1', async () => {
-            await compra.seleccionarCantidadHabitaciones();
-            await compra.FormularioPasajeros(0, variables.nombre, variables.apellido, variables.telefono, variables.genero, variables.fechaCumpleaños, variables.userEmail, variables.Dni, variables.fechaCaducidad, variables.fechaExpedicion, variables.codigoPostal, variables.nacionalidad);
-            await compra.FormularioPasajeros(1, variables.nombre, variables.apellido, variables.telefono, variables.genero, variables.fechaCumpleaños, variables.userEmail, variables.Dni, variables.fechaCaducidad, variables.fechaExpedicion, variables.codigoPostal, variables.nacionalidad);
+            await compra.seleccionarCantidadHabitaciones()
+            await compra.FormularioPasajeros(0, variables.apellido, variables.telefono, variables.genero, variables.fechaCumpleaños, variables.fechaCaducidad, variables.fechaExpedicion, variables.codigoPostal, variables.nacionalidad)
+            await compra.FormularioPasajeros(1, variables.apellido, variables.telefono, variables.genero, variables.fechaCumpleaños, variables.fechaCaducidad, variables.fechaExpedicion, variables.codigoPostal, variables.nacionalidad)
         })
     
         await test.step('Seleccionar actividades y plan Standard - Paso 2', async () => {
-            await compra.agregarActividad();
-            await compra.selecionarPlanStandard();
+            await compra.agregarActividad()
+            await compra.selecionarPlanStandard()
         })
     
         await test.step('Realizar el pago total con tarjeta - Paso 3', async () => {
-            await compra.pagoTotalConTarjeta();
+            await compra.pagoTotalConTarjeta()
         })
     
         await test.step('Validar estado de la compra exitosa', async () => {
-            await compra.pagoExitoso();
+            await compra.pagoExitoso()
         })
     })
     
     test('Flujo de compra para el plan Comfort Plus con pago de reserva', async ({ page }) => {
-        const compra = new compraTour(page);
+        const compra = new compraTour(page)
     
         await test.step('Seleccionar el tour y el período', async () => {
-            await compra.seleccionarTouraAndPeriodo(2);
+            await compra.seleccionarTouraAndPeriodo(2)
         })
     
         await test.step('Completar el formulario de pasajeros - Paso 1', async () => {
-            await compra.seleccionarCantidadHabitaciones();
-            await compra.FormularioPasajeros(0, variables.nombre, variables.apellido, variables.telefono, variables.genero, variables.fechaCumpleaños, variables.userEmail, variables.Dni, variables.fechaCaducidad, variables.fechaExpedicion, variables.codigoPostal, variables.nacionalidad);
-            await compra.FormularioPasajeros(1, variables.nombre, variables.apellido, variables.telefono, variables.genero, variables.fechaCumpleaños, variables.userEmail, variables.Dni, variables.fechaCaducidad, variables.fechaExpedicion, variables.codigoPostal, variables.nacionalidad);
+            await compra.seleccionarCantidadHabitaciones()
+            await compra.FormularioPasajeros(0, variables.apellido, variables.telefono, variables.genero, variables.fechaCumpleaños, variables.fechaCaducidad, variables.fechaExpedicion, variables.codigoPostal, variables.nacionalidad)
+            await compra.FormularioPasajeros(1, variables.apellido, variables.telefono, variables.genero, variables.fechaCumpleaños, variables.fechaCaducidad, variables.fechaExpedicion, variables.codigoPostal, variables.nacionalidad)
         })
     
         await test.step('Seleccionar actividades y plan Comfort Plus - Paso 2', async () => {
-            await compra.agregarActividad();
-            await compra.selecionarPlanComfortPlus();
+            await compra.agregarActividad()
+            await compra.selecionarPlanComfortPlus()
         })
     
         await test.step('Realizar el pago de reserva con Bizum - Paso 3', async () => {
-            await compra.pagoReservaTiempoBizum();
+            await compra.pagoReservaTiempoBizum()
         })
     
         await test.step('Validar estado de la compra exitosa', async () => {
-            await compra.pagoExitoso();
+            await compra.pagoExitoso()
         })
     })
     
@@ -106,12 +106,12 @@ test.describe('Como automatizador, quiero realizar el flujos de compra de un tou
         const compra = new compraTour(page)
     
         await test.step('Iniciar el proceso de compra seleccionando un tour y período', async () => {
-            await compra.seleccionarTouraAndPeriodo(2);
+            await compra.seleccionarTouraAndPeriodo(2)
         })
     
         await test.step('Seleccionar cantidad de habitaciones y continuar al siguiente paso', async () => {
-            await compra.seleccionarCantidadHabitaciones();
-            await page.getByRole('button', { name: 'Continuar' }).click();
+            await compra.seleccionarCantidadHabitaciones()
+            await page.getByRole('button', { name: 'Continuar' }).click()
         })
     
         await test.step('Verificar mensajes de error para campos obligatorios vacíos', async () => {
@@ -131,21 +131,21 @@ test.describe('Como automatizador, quiero realizar el flujos de compra de un tou
         const compra = new compraTour(page)
     
         await test.step('Iniciar el proceso de compra seleccionando un tour y período', async () => {
-            await compra.seleccionarTouraAndPeriodo(2);
+            await compra.seleccionarTouraAndPeriodo(2)
         })
     
         await test.step('Seleccionar cantidad de habitaciones y completar fechas inválidas en el formulario', async () => {
-            await compra.seleccionarCantidadHabitaciones();
+            await compra.seleccionarCantidadHabitaciones()
             await page.locator('//*[@id="reservation-field-birthday"]').nth(0).fill('2100-12-05'); // Fecha futura para nacimiento
             await page.locator('//*[@id="reservation-field-expiration"]').nth(0).fill('1995-11-12'); // Fecha pasada para caducidad
             await page.locator('//*[@id="reservation-field-issued"]').nth(0).fill('2100-12-05'); // Fecha futura para expedición
-            await page.getByRole('button', { name: 'Continuar' }).click();
+            await page.getByRole('button', { name: 'Continuar' }).click()
         })
     
         await test.step('Verificar mensajes de error para fechas no válidas', async () => {
-            await expect(page.getByText('La fecha de nacimiento no puede ser futura').first()).toHaveText('La fecha de nacimiento no puede ser futura');
-            await expect(page.getByText('La fecha de caducidad no puede estar en el pasado').first()).toHaveText('La fecha de caducidad no puede estar en el pasado');
-            await expect(page.getByText('La fecha de expedición no puede ser futura').first()).toHaveText('La fecha de expedición no puede ser futura');
+            await expect(page.getByText('La fecha de nacimiento no puede ser futura').first()).toHaveText('La fecha de nacimiento no puede ser futura')
+            await expect(page.getByText('La fecha de caducidad no puede estar en el pasado').first()).toHaveText('La fecha de caducidad no puede estar en el pasado')
+            await expect(page.getByText('La fecha de expedición no puede ser futura').first()).toHaveText('La fecha de expedición no puede ser futura')
         })
     })
 })

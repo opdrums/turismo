@@ -34,15 +34,23 @@ export class compraTour{
         await this.page.locator('div').filter({ hasText: /^Doble matrimonio para parejas juntas1 cama doble\+-$/ }).getByRole('button').nth(1).click()
     }
 
-    async FormularioPasajeros(formulario, nombre, apellido, telefono, genero, fechaCumpleaños, userEmail, Dni, fechaCaducidad, fechaExpedicion, codigoPostal, nacionalidad){
-        await this.page.locator('//*[@id="reservation-field-name"]').nth(formulario).fill(nombre)
+    async FormularioPasajeros(formulario, apellido, telefono, genero, fechaCumpleaños, fechaCaducidad, fechaExpedicion, codigoPostal, nacionalidad){
+        const nombres = ["Juan", "Ana", "Carlos", "Maria", "Luis", "Sofia", "Miguel", "Elena"]
+        const nombreAleatorio = nombres[Math.floor(Math.random() * nombres.length)]
+        const numeroAleatorio = Math.floor(1000 + Math.random() * 9000);
+
+        const numeroDniAleatorio = Math.floor(10000000 + Math.random() * 90000000);
+        const letrasDni = "TRWAGMYFPDXBNJZSQVHLCKE";
+        const letraDni = letrasDni[numeroDniAleatorio % 23];
+
+        await this.page.locator('//*[@id="reservation-field-name"]').nth(formulario).fill(`${nombreAleatorio}${numeroAleatorio}`)
         await this.page.locator('//*[@id="reservation-field-lastname"]').nth(formulario).fill(apellido)
         await this.page.locator('//*[@id="reservation-field-phone"]').nth(formulario).fill(telefono)
         await this.page.locator('//*[@id="reservation-field-sex"]').nth(formulario).selectOption(genero)
         await this.page.locator('//*[@id="reservation-field-birthday"]').nth(formulario).fill(fechaCumpleaños)
-        await this.page.locator('//*[@id="reservation-field-email"]').nth(formulario).fill(userEmail)
+        await this.page.locator('//*[@id="reservation-field-email"]').nth(formulario).fill(`${nombreAleatorio.toLowerCase()}${numeroAleatorio}@gmail.com`)
         await this.page.locator('//*[@id="reservation-field-confirm-email"]').nth(formulario).check()
-        await this.page.locator('//*[@id="reservation-field-dni"]').nth(formulario).fill(Dni);
+        await this.page.locator('//*[@id="reservation-field-dni"]').nth(formulario).fill(`${numeroDniAleatorio}${letraDni}`);
         await this.page.locator('//*[@id="reservation-field-expiration"]').nth(formulario).fill(fechaCaducidad)
         await this.page.locator('//*[@id="reservation-field-issued"]').nth(formulario).fill(fechaExpedicion)
         await this.page.locator('//*[@id="reservation-field-zip"]').nth(formulario).fill(codigoPostal)
