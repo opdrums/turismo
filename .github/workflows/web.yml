@@ -1,10 +1,10 @@
-name: Playwright Tests
+name: Web-side
 on:
   push:
     branches: [ master ]
     
 jobs:
-  test:
+  web:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
@@ -16,8 +16,8 @@ jobs:
       run: npm ci
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
-    - name: Run Playwright tests
-      run: npx playwright test
+    - name: Run Playwright tests web-side
+      run: npx playwright test e2e/web --workers=1
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
