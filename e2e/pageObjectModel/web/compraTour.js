@@ -1,3 +1,5 @@
+import { expect } from "@playwright/test"
+
 export class compraTour{
     constructor(page) {
         this.page = page
@@ -13,13 +15,21 @@ export class compraTour{
 
     async seleccionarTouraAndPeriodo(tour){
         await this.page.getByRole('link', { name: 'Ver tour' }).nth(tour).click()
-        await this.page.getByRole('button', { name: 'Seleccionar' }).first().scrollIntoViewIfNeeded()
         await this.page.getByRole('button', { name: 'Seleccionar' }).first().hover()
         await this.page.getByRole('button', { name: 'Seleccionar' }).first().click()
-        await this.page.getByRole('button', { name: 'Selección de habitaciones ' }).first().waitFor({ state: 'visible' })
+
+        const alert = this.page.locator('//div/div[2]/div[2]/div/div[1]/a/span')
+        if(await alert.isVisible()){
+            await this.page.getByLabel('Cerrar').click()
+            await this.page.getByRole('button', { name: 'Seleccionar' }).first().hover()
+            await this.page.getByRole('button', { name: 'Seleccionar' }).first().click()
+        }else{
+            console.log('No se visualiza la alerta de login')
+        }
     }
 
     async seleccionarCantidadHabitaciones(){
+        await this.page.getByRole('button', { name: 'Selección de habitaciones ' }).first().waitFor({ state: 'visible' })
         await this.page.locator('div').filter({ hasText: /^Adultos\(Desde 12 años\)\+-$/ }).getByRole('button').nth(1).click()
         await this.page.locator('div').filter({ hasText: /^Doble matrimonio para parejas juntas1 cama doble\+-$/ }).getByRole('button').nth(1).click()
     }
@@ -50,7 +60,7 @@ export class compraTour{
         }
     }
     
-    async selecionarStandard(){
+    async selecionarPlanStandard(){
         await this.page.locator('//div[2]/div/div/div/div[1]/div[3]/div[2]').click()
         await this.page.getByRole('button', { name: 'Continuar' }).click()
     }
@@ -61,7 +71,7 @@ export class compraTour{
     }
 
     async selecionarPlanComfortPlus(){
-        await this.page.locator('//div[2]/div/div/div/div[3]/div[3]/div[2').click()
+        await this.page.locator('//div[2]/div/div/div/div[3]/div[3]/div[2]').click()
         await this.page.getByRole('button', { name: 'Continuar' }).click()
     }
     
@@ -80,5 +90,39 @@ export class compraTour{
         await this.page.locator('#divImgAceptar').click()
         await this.page.locator('//*[@id="body"]/div[2]/div[2]/div[1]/input[2]').waitFor({ state: 'visible' })
     }
+
+    async pagoReservaTiempoBizum(){
+        await this.page.getByRole('button', { name: 'Paga la reserva de plaza y no' }).click()
+        await this.page.getByRole('button', { name: 'Bizum' }).click()
+        await this.page.getByLabel('Acepto términos de privacidad').check()
+        await this.page.getByRole('button', { name: 'Realizar pago' }).click()
+    }
+
+    async pagoTotalTransferenciaBancaria(){
+        await this.page.getByRole('button', { name: 'Paga tu viaje al completo 1.' }).click()
+        await this.page.getByRole('button', { name: 'Transferencia bancaria' }).click()
+        await this.page.getByLabel('Acepto términos de privacidad').check()
+        await this.page.getByRole('button', { name: 'Realizar pago' }).click()
+    }
+
+    async pagoExitoso(){
+        await this.page.locator('//div/div/div/div[1]/div/h1').waitFor({ state: 'visible' })
+        expect(await this.page.locator('//div/div/div/div[1]/div/h1')).toHaveText('¡Tu reserva ha sido confirmada!')
+    }
+
+    async pagoFallido(){
+        await this.page.locator('//div/div/div/div[1]/div/h1').waitFor({ state: 'visible' })
+        expect(await this.page.locator('//div/div/div/div[1]/div/h1')).toHaveText('Tu reserva no se ha completado como planeamos. Te animamos a volver a intentarlo.')
+    }
+
+    async pagoPeticion(){
+        await this.page.locator('//div/div/div/div[1]/div/h1').waitFor({ state: 'visible' })
+        expect(await this.page.locator('//div/div/div/div[1]/div/h1')).toHaveText('Tu reserva está en petición.')
+    }
+
+    async pagoTransferencia(){
+        await this.page.locator('//div/div/div/div[1]/div/h1').waitFor({ state: 'visible' })
+        expect(await this.page.locator('//div/div/div/div[1]/div/h1')).toHaveText('Confirma ahora tu petición de reserva realizando el pago por transferencia.')
+    }   
 }
 export default compraTour
