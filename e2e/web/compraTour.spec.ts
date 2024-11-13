@@ -29,8 +29,8 @@ test.describe('Como automatizador, quiero realizar el flujos de compra de un tou
     
         await test.step('Completar el formulario de pasajeros - Paso 1', async () => {
             await compra.seleccionarCantidadHabitaciones();
-            await compra.FormularioPasajeros(0, variables.apellido, variables.telefono, variables.genero, variables.fechaCumpleaños, variables.fechaCaducidad, variables.fechaExpedicion, variables.codigoPostal, variables.nacionalidad)
-            await compra.FormularioPasajeros(1, variables.apellido, variables.telefono, variables.genero, variables.fechaCumpleaños, variables.fechaCaducidad, variables.fechaExpedicion, variables.codigoPostal, variables.nacionalidad)
+            await compra.FormularioPasajeros(0, variables)
+            await compra.FormularioPasajeros(1, variables)
         })
     
         await test.step('Seleccionar actividades y plan Comfort - Paso 2', async () => {
@@ -56,8 +56,8 @@ test.describe('Como automatizador, quiero realizar el flujos de compra de un tou
     
         await test.step('Completar el formulario de pasajeros - Paso 1', async () => {
             await compra.seleccionarCantidadHabitaciones()
-            await compra.FormularioPasajeros(0, variables.apellido, variables.telefono, variables.genero, variables.fechaCumpleaños, variables.fechaCaducidad, variables.fechaExpedicion, variables.codigoPostal, variables.nacionalidad)
-            await compra.FormularioPasajeros(1, variables.apellido, variables.telefono, variables.genero, variables.fechaCumpleaños, variables.fechaCaducidad, variables.fechaExpedicion, variables.codigoPostal, variables.nacionalidad)
+            await compra.FormularioPasajeros(0, variables)
+            await compra.FormularioPasajeros(1, variables)
         })
     
         await test.step('Seleccionar actividades y plan Standard - Paso 2', async () => {
@@ -83,8 +83,8 @@ test.describe('Como automatizador, quiero realizar el flujos de compra de un tou
     
         await test.step('Completar el formulario de pasajeros - Paso 1', async () => {
             await compra.seleccionarCantidadHabitaciones()
-            await compra.FormularioPasajeros(0, variables.apellido, variables.telefono, variables.genero, variables.fechaCumpleaños, variables.fechaCaducidad, variables.fechaExpedicion, variables.codigoPostal, variables.nacionalidad)
-            await compra.FormularioPasajeros(1, variables.apellido, variables.telefono, variables.genero, variables.fechaCumpleaños, variables.fechaCaducidad, variables.fechaExpedicion, variables.codigoPostal, variables.nacionalidad)
+            await compra.FormularioPasajeros(0, variables)
+            await compra.FormularioPasajeros(1, variables)
         })
     
         await test.step('Seleccionar actividades y plan Comfort Plus - Paso 2', async () => {

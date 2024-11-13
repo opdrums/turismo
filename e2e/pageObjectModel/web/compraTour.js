@@ -34,7 +34,7 @@ export class compraTour{
         await this.page.locator('div').filter({ hasText: /^Doble matrimonio para parejas juntas1 cama doble\+-$/ }).getByRole('button').nth(1).click()
     }
 
-    async FormularioPasajeros(formulario, apellido, telefono, genero, fechaCumpleaños, fechaCaducidad, fechaExpedicion, codigoPostal, nacionalidad){
+    async FormularioPasajeros(formulario, variables){
         const nombres = ["Juan", "Ana", "Carlos", "Maria", "Luis", "Sofia", "Miguel", "Elena"]
         const nombreAleatorio = nombres[Math.floor(Math.random() * nombres.length)]
         const numeroAleatorio = Math.floor(1000 + Math.random() * 9000);
@@ -44,17 +44,17 @@ export class compraTour{
         const letraDni = letrasDni[numeroDniAleatorio % 23];
 
         await this.page.locator('//*[@id="reservation-field-name"]').nth(formulario).fill(`${nombreAleatorio}${numeroAleatorio}`)
-        await this.page.locator('//*[@id="reservation-field-lastname"]').nth(formulario).fill(apellido)
-        await this.page.locator('//*[@id="reservation-field-phone"]').nth(formulario).fill(telefono)
-        await this.page.locator('//*[@id="reservation-field-sex"]').nth(formulario).selectOption(genero)
-        await this.page.locator('//*[@id="reservation-field-birthday"]').nth(formulario).fill(fechaCumpleaños)
+        await this.page.locator('//*[@id="reservation-field-lastname"]').nth(formulario).fill(variables.apellido)
+        await this.page.locator('//*[@id="reservation-field-phone"]').nth(formulario).fill(variables.telefono)
+        await this.page.locator('//*[@id="reservation-field-sex"]').nth(formulario).selectOption(variables.genero)
+        await this.page.locator('//*[@id="reservation-field-birthday"]').nth(formulario).fill(variables.fechaCumpleaños)
         await this.page.locator('//*[@id="reservation-field-email"]').nth(formulario).fill(`${nombreAleatorio.toLowerCase()}${numeroAleatorio}@gmail.com`)
         await this.page.locator('//*[@id="reservation-field-confirm-email"]').nth(formulario).check()
         await this.page.locator('//*[@id="reservation-field-dni"]').nth(formulario).fill(`${numeroDniAleatorio}${letraDni}`);
-        await this.page.locator('//*[@id="reservation-field-expiration"]').nth(formulario).fill(fechaCaducidad)
-        await this.page.locator('//*[@id="reservation-field-issued"]').nth(formulario).fill(fechaExpedicion)
-        await this.page.locator('//*[@id="reservation-field-zip"]').nth(formulario).fill(codigoPostal)
-        await this.page.locator('//*[@id="reservation-field-nationality"]').nth(formulario).selectOption(nacionalidad)
+        await this.page.locator('//*[@id="reservation-field-expiration"]').nth(formulario).fill(variables.fechaCaducidad)
+        await this.page.locator('//*[@id="reservation-field-issued"]').nth(formulario).fill(variables.fechaExpedicion)
+        await this.page.locator('//*[@id="reservation-field-zip"]').nth(formulario).fill(variables.codigoPostal)
+        await this.page.locator('//*[@id="reservation-field-nationality"]').nth(formulario).selectOption(variables.nacionalidad)
     }
 
     async agregarActividad() {

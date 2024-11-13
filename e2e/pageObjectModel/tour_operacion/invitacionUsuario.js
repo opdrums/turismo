@@ -71,7 +71,6 @@ export class invitacionUsuario {
         const nombres = ["Juan", "Ana", "Carlos", "Maria", "Luis", "Sofia", "Miguel", "Elena"]
         const nombreAleatorio = nombres[Math.floor(Math.random() * nombres.length)]
         const numeroAleatorio = Math.floor(1000 + Math.random() * 9000);
-
         const [view3] = await Promise.all([
             context.waitForEvent('page'), 
         ])
@@ -94,6 +93,47 @@ export class invitacionUsuario {
         await this.page.getByRole('button', { name: 'Entrar'}).click()
         await this.page.getByRole('link', { name: ' Usuarios' }).click()
         await this.page.getByRole('button', { name: 'Invitar Usuario' }).click()
+    }
+
+    async validacionCamposObligatorios(context){
+        const [view3] = await Promise.all([
+            context.waitForEvent('page'), 
+        ])
+
+        await view3.getByRole('button', { name: 'Completar registro' }).click()
+        expect(await view3.getByText('El usuario es requerido.')).toBeVisible()
+        expect(await view3.getByText('El nombre es requerido.')).toBeVisible()
+        expect(await view3.getByText('La contraseña es requerida.')).toBeVisible()
+        expect(await view3.getByText('El apellido es requerido.')).toBeVisible()
+    }
+
+    async validacionUsuarioRegistrado(context, variables){
+        const [view3] = await Promise.all([
+            context.waitForEvent('page'), 
+        ])
+
+        await view3.getByPlaceholder('Usuario').fill(variables.usuario)
+        await view3.getByPlaceholder('Nombre').fill(variables.nombre)
+        await view3.getByPlaceholder('Contraseña', { exact: true }).fill(variables.password)
+        await view3.getByPlaceholder('Apellido').fill(variables.apellido)
+        await view3.getByPlaceholder('Confirmar contraseña').fill(variables.password)
+        await view3.getByRole('button', { name: 'Completar registro' }).click()
+        await view3.getByText('El nombre de usuario ya').waitFor({state:'visible'})
+        expect(await view3.getByText('El nombre de usuario ya')).toHaveText('El nombre de usuario ya existe. Por favor, elija otro.')
+    }
+
+    async validacionContraseñaIncorrecta(context, variables){
+        const [view3] = await Promise.all([
+            context.waitForEvent('page'), 
+        ])
+
+        await view3.getByPlaceholder('Usuario').fill(variables.usuario)    
+        await view3.getByPlaceholder('Nombre').fill(variables.nombre)
+        await view3.getByPlaceholder('Contraseña', { exact: true }).fill(variables.password)
+        await view3.getByPlaceholder('Apellido').fill(variables.apellido)
+        await view3.getByPlaceholder('Confirmar contraseña').fill(variables.passwordError)
+        await view3.getByRole('button', { name: 'Completar registro' }).click()
+        expect(await view3.getByText('Las contraseñas no coinciden')).toHaveText('Las contraseñas no coinciden')
     }
 }
 
