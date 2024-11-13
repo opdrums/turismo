@@ -1,17 +1,14 @@
 import {  expect,test } from "@playwright/test";
-const { chromium } = require('playwright');
 import * as fs from 'fs'
+const { chromium } = require('playwright');
 import invitacionUsuario from '../../e2e/pageObjectModel/tour_operacion/invitacionUsuario'
-import { console } from "inspector";
 
 const path = require('path');
 const configPath = path.resolve(__dirname, '../../e2e/configuracion/tour_operacion/invitacionUsuario.json');
 const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 let invitacion = new invitacionUsuario()
-let urltemporal
 
 test.describe('como automatizador quiero validar el flujo de registro', () => {
-    //test.describe.configure({ mode: 'serial' })
     let view1
     let view2
     let browser

@@ -12,17 +12,17 @@ test.describe('Como automatizador quiero hacer el flujo de inivitaciones', () =>
     test.afterEach(async ({ page }) => {
         await page.context().cookies(variables.urlBase)
         await page.context().clearCookies()
-        await page.close()
     })
 
     for(const rol of variables.roles){
-        test(`Enviar invitaciones ${rol}`, async ({}, testInfo) => {
+        test(`Enviar invitaciones ${rol}`, async ({page}, testInfo) => {
             const isHeadless = !!process.env.CI
             const browser = await chromium.launch({ headless: isHeadless })
             
             const context = await browser.newContext()
             const view1 = await context.newPage()
             const view2 = await context.newPage()
+            await page.close()
 
             await test.step('Abrir vistas', async () => {
                 await invitacion.abrirVistas(view1, view2, variables)

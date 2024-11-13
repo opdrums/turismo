@@ -15,7 +15,7 @@ test.describe('Como automatizador quiero crear casos de olvidar contraseña', ()
         await page.close()
     })
 
-    test('crear flujo de olvidar contraseña exitoso', async () => {
+    test('crear flujo de olvidar contraseña exitoso', async ({page}) => {
         test.info().annotations.push({
           type: 'info',
           description: 'Tener presente que si dejan de llegar códigos de confirmación al correo, el usuario debe esperar una hora'
@@ -26,6 +26,8 @@ test.describe('Como automatizador quiero crear casos de olvidar contraseña', ()
         const context = await browser.newContext()
         const view1 = await context.newPage()
         const view2 = await context.newPage()
+        await page.close()
+
       
         await test.step('Abrir vistas', async () => {
             await recuperacion.abrirVistas(view1, view2, variables)

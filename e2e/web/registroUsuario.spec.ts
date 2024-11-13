@@ -13,15 +13,16 @@ test.describe('como automatizador quiero validar el flujo de registro de usuario
     test.afterEach(async ({ page }) => {
         await page.context().cookies(variables.urlBase)
         await page.context().clearCookies()
-        await page.close()
     })
 
-    test('Registro de usuario exitoso', async ({}) => {
+    test('Registro de usuario exitoso', async ({page}) => {
         const isHeadless = !!process.env.CI
         const browser = await chromium.launch({ headless: isHeadless })
         const context = await browser.newContext()
         const view1 = await context.newPage()
         const view2 = await context.newPage()
+        await page.close()
+
 
         await test.step('Abrir vistas', async () => {
             await codigos.abrirVistas(view1, view2, variables);
