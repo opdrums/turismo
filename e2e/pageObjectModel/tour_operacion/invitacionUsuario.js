@@ -86,10 +86,10 @@ export class invitacionUsuario {
         expect(view3.getByText('Se ha enviado un código a tu')).toBeVisible()
     }
 
-    async iniciarSessionInvitacion(url, userName, password){
-        await this.page.goto(url)
-        await this.page.locator('#user').fill(userName)
-        await this.page.locator('#password').fill(password)
+    async iniciarSessionInvitacion(variables){
+        await this.page.goto(variables.urlBase)
+        await this.page.locator('#user').fill(variables.userName)
+        await this.page.locator('#password').fill(variables.password)
         await this.page.getByRole('button', { name: 'Entrar'}).click()
         await this.page.getByRole('link', { name: ' Usuarios' }).click()
         await this.page.getByRole('button', { name: ' Añadir usuario' }).click()
@@ -134,6 +134,23 @@ export class invitacionUsuario {
         await view3.getByPlaceholder('Confirmar contraseña').fill(variables.passwordError)
         await view3.getByRole('button', { name: 'Completar registro' }).click()
         expect(await view3.getByText('Las contraseñas no coinciden')).toHaveText('Las contraseñas no coinciden')
+    }
+
+    async validacionCorreoAndRolVacio(){
+        await this.page.getByRole('button', { name: 'Enviar invitación' }).click() 
+        const mensajeError1 = await this.page.locator('//div[2]/div/form/div/div[1]/p[1]').textContent()
+        expect(mensajeError1).toBe('El correo electrónico es requerido.')   
+        const mensajeError2 = await this.page.locator('//div[2]/div/form/div/div[2]/p[1 ]').textContent()
+        expect(mensajeError2).toBe('Se debe seleccionar al menos un rol de usuario.')
+    }
+
+    async validacionCorreoExiste(variables){
+        await this.page.getByPlaceholder('E-mail').fill(variables.email)
+        await this.page.locator('div').filter({ hasText: /^Admin de Tours$/ }).getByRole('checkbox').check()
+        await this.page.getByRole('button', { name: 'Enviar invitación' }).click()
+        await this.page.getByText('El correo electrónico es')
+        const mensajeError = await this.page.getByText('Error al enviar la invitación').textContent()
+        await expect(mensajeError).toBe('Error al enviar la invitación. Por favor, intente de nuevo.') 
     }
 }
 

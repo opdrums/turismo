@@ -5,11 +5,11 @@ export class compraTour{
         this.page = page
     }
 
-    async loginUser(url, email, password){
-        await this.page.goto(url)
+    async loginUser(variables){
+        await this.page.goto(variables.urlWeb)
         await this.page.getByRole('link', { name: 'Iniciar sesión' }).click()
-        await this.page.getByPlaceholder('E-mail').fill(email)
-        await this.page.getByPlaceholder('Contraseña').fill(password)
+        await this.page.getByPlaceholder('E-mail').fill(variables.email)
+        await this.page.getByPlaceholder('Contraseña').fill(variables.password)
         await this.page.getByRole('button', { name: 'Continuar' }).click()
     }
 
@@ -132,5 +132,28 @@ export class compraTour{
         await this.page.locator('//div/div/div/div[1]/div/h1').waitFor({ state: 'visible' })
         expect(await this.page.locator('//div/div/div/div[1]/div/h1')).toHaveText('Confirma ahora tu petición de reserva realizando el pago por transferencia.')
     }   
+
+    async validacionCamposVacios(){
+        await this.page.getByRole('button', { name: 'Continuar' }).click()
+        await expect(this.page.getByText('El nombre es obligatorio').first()).toHaveText('El nombre es obligatorio')
+        await expect(this.page.getByText('El apellido es obligatorio').first()).toHaveText('El apellido es obligatorio')
+        await expect(this.page.getByText('El teléfono es obligatorio').first()).toHaveText('El teléfono es obligatorio')
+        await expect(this.page.getByText('Selecciona el sexo').first()).toHaveText('Selecciona el sexo')
+        await expect(this.page.getByText('La fecha de nacimiento es obligatoria').first()).toHaveText('La fecha de nacimiento es obligatoria')
+        await expect(this.page.getByText('El correo electrónico es obligatorio').first()).toHaveText('El correo electrónico es obligatorio')
+        await expect(this.page.getByText('El DNI es obligatorio').first()).toHaveText('El DNI es obligatorio')
+        await expect(this.page.getByText('El código postal es obligatorio').first()).toHaveText('El código postal es obligatorio')
+        await expect(this.page.getByText('Selecciona la nacionalidad').first()).toHaveText('Selecciona la nacionalidad')
+    }
+
+    async validacionFechasInvalidas(){
+        await this.page.locator('//*[@id="reservation-field-birthday"]').nth(0).fill('2100-12-05')
+        await this.page.locator('//*[@id="reservation-field-expiration"]').nth(0).fill('1995-11-12')
+        await this.page.locator('//*[@id="reservation-field-issued"]').nth(0).fill('2100-12-05')
+        await this.page.getByRole('button', { name: 'Continuar' }).click()
+        await expect(this.page.getByText('La fecha de nacimiento no puede ser futura').first()).toHaveText('La fecha de nacimiento no puede ser futura')
+        await expect(this.page.getByText('La fecha de caducidad no puede estar en el pasado').first()).toHaveText('La fecha de caducidad no puede estar en el pasado')
+        await expect(this.page.getByText('La fecha de expedición no puede ser futura').first()).toHaveText('La fecha de expedición no puede ser futura')
+    }
 }
 export default compraTour

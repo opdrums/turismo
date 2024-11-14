@@ -3,13 +3,14 @@ import { expect } from "@playwright/test";
 export class landings {
 
     constructor(page) {
-        this.page = page;
-        this.newSlug = null;
+        this.page = page
+        this.newSlug = null
+        this.titleLanding = null
     }
 
     async abrirVistas(view1, view2, variables) {
-        view1.setDefaultTimeout(120000);
-        view2.setDefaultTimeout(230000);
+        view1.setDefaultTimeout(120000)
+        view2.setDefaultTimeout(230000)
 
         await Promise.all([
             view1.goto(variables.urlWeb),
@@ -36,14 +37,17 @@ export class landings {
         await view1.locator('//div[4]/div/div[2]/div/div/div[2]/div/div/div').fill(variables.descripcionSlug)
         await view1.locator('[id="seo\\.title-input"]').fill(`${slugAleatorio}${numeroAleatorio}`, { force: true })
         await view1.locator('//div/div[2]/div/div[2]/div/div/div[2]/div/div/div').fill(variables.descripcionSeo)
+        this.titleLanding = await view1.locator('#title-input').inputValue()
         this.newSlug = await view1.locator('#slug-input').inputValue()
     }
 
     async ingresoLanding(view2) {
         if (!this.newSlug) {
-            throw new Error('Error: newSlug está null, asegúrate de ejecutar formulario() antes');
+            throw new Error('Error: newSlug está null, asegúrate de ejecutar formulario() antes')
         }
-        await view2.goto(`https://new.differentroads.es/es/landing/${this.newSlug}`);
+        await view2.goto(`https://new.differentroads.es/es/landing/${this.newSlug}`)
+        await view2.locator('//div/div/div/div/div/h1').waitFor({ state: 'visible' })
+        expect(this.titleLanding).toBeVisible()
     }
 
     async agregarComponente(view1){
@@ -73,6 +77,7 @@ export class landings {
 
     async publicarLanding(view1){
         await view1.locator('//form/div[2]/button/span').click()
+        await view1.waitForTimeout(2000)
     }
 
     async validacionCamposVacios(view1){

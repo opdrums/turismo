@@ -1,12 +1,12 @@
-import {  expect,test } from "@playwright/test";
-const { chromium } = require('playwright');
-import * as fs from 'fs'
+import { test } from "@playwright/test";
 import invitacionUsuario from '../pageObjectModel/tour_operacion/invitacionUsuario'
+import * as fs from 'fs'
 
-const path = require('path');
-const configPath = path.resolve(__dirname, '../../e2e/configuracion/tour_operacion/invitacionUsuario.json');
-const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-let invitacion = new invitacionUsuario()
+
+const path = require('path')
+const { chromium } = require('playwright')
+const configPath = path.resolve(__dirname, '../../e2e/configuracion/tour_operacion/invitacionUsuario.json')
+const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'))
 
 test.describe('Como automatizador quiero hacer el flujo de inivitaciones', () => {
     test.afterEach(async ({ page }) => {
@@ -16,10 +16,11 @@ test.describe('Como automatizador quiero hacer el flujo de inivitaciones', () =>
     })
 
     for(const rol of variables.roles){
-        test(`Enviar invitaciones ${rol}`, async ({page}, testInfo) => {
+        test(`Enviar invitaciones ${rol}`, async ({page}) => {
+            let invitacion = new invitacionUsuario()
+
             const isHeadless = !!process.env.CI
             const browser = await chromium.launch({ headless: isHeadless })
-            
             const context = await browser.newContext()
             const view1 = await context.newPage()
             const view2 = await context.newPage()
@@ -52,39 +53,24 @@ test.describe('Como automatizador quiero hacer el flujo de inivitaciones', () =>
     }
 
     test(`Enviar invitación con el campo de correo vacío `, async ({page}) => {
+        const invitaciones = new invitacionUsuario(page)
         await test.step('Iniciar sesión y acceder a la sección de Usuarios', async () => {
-            const invitaciones = new invitacionUsuario(page)
-            await invitaciones.iniciarSessionInvitacion(variables.urlBase, variables.userName, variables.password)
-        })
-  
-        await test.step('No escribir correo y seleccionar rol', async () => {
-            await page.getByRole('button', { name: 'Enviar invitación' }).click() 
+            await invitaciones.iniciarSessionInvitacion(variables)
         })
 
-        await test.step('Verificar mensaje de error con campo vacio', async () => {
-            const mensajeError1 = await page.locator('//div[2]/div/form/div/div[1]/p[1]').textContent()
-            expect(mensajeError1).toBe('El correo electrónico es requerido.')   
-            const mensajeError2 = await page.locator('//div[2]/div/form/div/div[2]/p[1 ]').textContent()
-            expect(mensajeError2).toBe('Se debe seleccionar al menos un rol de usuario.')
+        await test.step('Verificar mensaje de error con campo vacio email y rol', async () => {
+           await invitaciones.validacionCorreoAndRolVacio()
         })
     })
    
     test(`Enviar invitación a un correo existente`, async ({page}) => {
+        const invitaciones = new invitacionUsuario(page)
         await test.step('Iniciar sesión y acceder a la sección de Usuarios', async () => {
-            const invitaciones = new invitacionUsuario(page)
-            await invitaciones.iniciarSessionInvitacion(variables.urlBase, variables.userName, variables.password)
-        })
-        
-        await test.step('Escribir correo y seleccionar rol', async () => {
-            await page.getByPlaceholder('E-mail').fill(variables.email)
-            await page.locator('div').filter({ hasText: /^Admin de Tours$/ }).getByRole('checkbox').check()
-            await page.getByRole('button', { name: 'Enviar invitación' }).click()
-            await page.getByText('El correo electrónico es')
+            await invitaciones.iniciarSessionInvitacion(variables)
         })
 
         await test.step('Verificar mensaje de error de selección de rol', async () => {
-            const mensajeError = await page.getByText('Error al enviar la invitación').textContent()
-            await expect(mensajeError).toBe('Error al enviar la invitación. Por favor, intente de nuevo.') 
+            await invitaciones.validacionCorreoExiste(variables)
         })
     })  
 })
