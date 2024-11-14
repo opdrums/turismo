@@ -20,8 +20,8 @@ export class invitacionUsuario {
         await view1.locator('#user').fill(variables.userName)
         await view1.locator('#password').fill(variables.password)
         await view1.getByRole('button', { name: 'Entrar'}).click()
-        await view1.getByRole('link', { name: ' Usuarios' }).click()
-        await view1.getByRole('button', { name: 'Invitar Usuario' }).click()
+        await view1.getByRole('link', { name: ' Usuarios' }).click()
+        await view1.getByRole('button', { name: ' Añadir usuario' }).click()
     }
 
     async obtenerEmailProvicional(view2){
@@ -91,8 +91,8 @@ export class invitacionUsuario {
         await this.page.locator('#user').fill(userName)
         await this.page.locator('#password').fill(password)
         await this.page.getByRole('button', { name: 'Entrar'}).click()
-        await this.page.getByRole('link', { name: ' Usuarios' }).click()
-        await this.page.getByRole('button', { name: 'Invitar Usuario' }).click()
+        await this.page.getByRole('link', { name: ' Usuarios' }).click()
+        await this.page.getByRole('button', { name: ' Añadir usuario' }).click()
     }
 
     async validacionCamposObligatorios(context){

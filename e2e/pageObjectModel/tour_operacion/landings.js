@@ -20,7 +20,7 @@ export class landings {
         await view1.locator('#user').fill(variables.userName);
         await view1.locator('#password').fill(variables.password);
         await view1.getByRole('button', { name: 'Entrar' }).click();
-        await view1.getByRole('link', { name: ' Landings' }).waitFor({ state: 'visible' })
+        await view1.getByRole('link', { name: ' Landings' }).waitFor({ state: 'visible' })
     }
 
     async formulario(view1, variables) {
@@ -28,7 +28,7 @@ export class landings {
         const slugAleatorio = slug[Math.floor(Math.random() * slug.length)]
         const numeroAleatorio = Math.floor(1000 + Math.random() * 9000)
 
-        await view1.getByRole('link', { name: ' Landings' }).click()
+        await view1.getByRole('link', { name: ' Landings' }).click({force: true })
         await view1.getByLabel('Crear').click()
 
         await view1.locator('#title-input').fill(`${slugAleatorio}${numeroAleatorio}`, { force: true })

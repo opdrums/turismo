@@ -25,6 +25,14 @@ test.describe('Como automatizador quiero hacer flujos de landings', () => {
         await landing.login(view1, variables)
     })
 
+    test.afterEach(async ({ page }) => {
+        await view1.context().cookies(variables.urlBase)
+        await view1.context().clearCookies()
+        await view1.close()
+        await view2.close()
+    })
+    
+
     test('Creación de landing con componente de banner', async ({ page }) => {
         await test.step('Navegar al formulario de creación de landing', async () => {
             await landing.formulario(view1, variables)

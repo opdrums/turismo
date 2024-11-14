@@ -66,7 +66,7 @@ test.describe('Como automatizador quiero crear casos de olvidar contraseña', ()
 
         await test.step('Iniciar proceso de recuperación de contraseña', async () => {
             const recuperacionCodigo = new olvidarContraseña(page)
-            recuperacionCodigo.flujoCodigoRecuperacion(variables.urlTour, variables.userName)
+            await recuperacionCodigo.flujoCodigoRecuperacion(variables.urlTour, variables.userName)
         })
         
         await test.step('Ingresar código de verificación incorrecto y nueva contraseña', async () => {
@@ -80,7 +80,7 @@ test.describe('Como automatizador quiero crear casos de olvidar contraseña', ()
     test('Verificación de contraseñas no coincidentes', async ({ page }) => {
         await test.step('Iniciar proceso de recuperación de contraseña', async () => {
             const recuperacionCodigo = new olvidarContraseña(page)
-            recuperacionCodigo.flujoCodigoRecuperacion(variables.urlTour, variables.userName)
+            await recuperacionCodigo.flujoCodigoRecuperacion(variables.urlTour, variables.userName)
         })
         
         await test.step('Ingresar código de verificación y contraseñas no coincidentes', async () => {
@@ -99,7 +99,7 @@ test.describe('Como automatizador quiero crear casos de olvidar contraseña', ()
     test('Validación de campos obligatorios vacíos', async ({ page }) => {
         await test.step('Iniciar proceso de recuperación de contraseña', async () => {
             const recuperacionCodigo = new olvidarContraseña(page)
-            recuperacionCodigo.flujoCodigoRecuperacion(variables.urlTour, variables.userName)
+            await recuperacionCodigo.flujoCodigoRecuperacion(variables.urlTour, variables.userName)
         })
 
         await test.step('Intentar confirmar con campos de contraseña vacíos', async () => {

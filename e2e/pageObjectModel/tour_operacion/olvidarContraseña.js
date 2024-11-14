@@ -12,7 +12,7 @@ export class olvidarContraseña {
     await Promise.all([
       view1.goto(variables.urlTour),
       view2.goto(variables.urlTeam)
-    ]);
+    ])
   }
 
   async iniciarRecuperacionContraseña(view1, variables) {
@@ -24,11 +24,11 @@ export class olvidarContraseña {
   }
 
   async iniciarSesionMicrosoft(view2, variables) {
-    await view2.getByRole('button', { name: 'Next' }).waitFor({ state: 'visible' })
-    await view2.getByPlaceholder('Email, phone, or Skype').fill(variables.email)
-    await view2.getByRole('button', { name: 'Next' }).click()
-    await view2.getByPlaceholder('Password').fill(variables.password)
-    await view2.getByRole('button', { name: 'Sign in' }).click()
+    await view2.getByRole('button', { name: 'Siguiente' }).waitFor({ state: 'visible' })
+    await view2.locator('//*[@id="i0116"]').fill(variables.email)
+    await view2.getByRole('button', { name: 'Siguiente' }).click()
+    await view2.locator('//*[@id="i0118"]').fill(variables.password)
+    await view2.getByRole('button', { name: 'Iniciar sesión' }).click()
     await view2.getByRole('button', { name: 'No' }).click()
   }
 

@@ -12,6 +12,7 @@ test.describe('Como automatizador quiero hacer el flujo de inivitaciones', () =>
     test.afterEach(async ({ page }) => {
         await page.context().cookies(variables.urlBase)
         await page.context().clearCookies()
+        await page.close()
     })
 
     for(const rol of variables.roles){
@@ -53,7 +54,7 @@ test.describe('Como automatizador quiero hacer el flujo de inivitaciones', () =>
     test(`Enviar invitación con el campo de correo vacío `, async ({page}) => {
         await test.step('Iniciar sesión y acceder a la sección de Usuarios', async () => {
             const invitaciones = new invitacionUsuario(page)
-            invitaciones.iniciarSessionInvitacion(variables.urlBase, variables.userName, variables.password)
+            await invitaciones.iniciarSessionInvitacion(variables.urlBase, variables.userName, variables.password)
         })
   
         await test.step('No escribir correo y seleccionar rol', async () => {
@@ -71,7 +72,7 @@ test.describe('Como automatizador quiero hacer el flujo de inivitaciones', () =>
     test(`Enviar invitación a un correo existente`, async ({page}) => {
         await test.step('Iniciar sesión y acceder a la sección de Usuarios', async () => {
             const invitaciones = new invitacionUsuario(page)
-            invitaciones.iniciarSessionInvitacion(variables.urlBase, variables.userName, variables.password)
+            await invitaciones.iniciarSessionInvitacion(variables.urlBase, variables.userName, variables.password)
         })
         
         await test.step('Escribir correo y seleccionar rol', async () => {
