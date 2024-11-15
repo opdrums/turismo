@@ -13,7 +13,7 @@ export class compraTour{
         await this.page.getByRole('button', { name: 'Continuar' }).click()
     }
 
-    async seleccionarTouraAndPeriodo(tour){
+    async seleccionarTouraAndPeriodo(tour, test){
         await this.page.getByRole('link', { name: 'Ver tour' }).nth(tour).click()
         await this.page.getByRole('button', { name: 'Seleccionar' }).first().hover()
         await this.page.getByRole('button', { name: 'Seleccionar' }).first().click()
@@ -24,7 +24,7 @@ export class compraTour{
             await this.page.getByRole('button', { name: 'Seleccionar' }).first().hover()
             await this.page.getByRole('button', { name: 'Seleccionar' }).first().click()
         }else{
-            console.log('No se visualiza la alerta de login')
+            test.info().annotations.push({ type: 'info', description: 'No se visualizó la alerta de inicio de sesión' })
         }
     }
 

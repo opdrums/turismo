@@ -41,7 +41,7 @@ test.describe('como automatizador quiero validar el flujo de registro de usuario
         })
         
         await test.step('Obtener código de confirmación desde el correo', async () => {
-            await codigos.obtenerCodigoConfirmacion(view2)
+            await codigos.obtenerCodigoConfirmacion(view2, test)
         })
     
         await test.step('Ingresar el código de confirmación en la vista 1', async () => {
@@ -82,7 +82,7 @@ test.describe('como automatizador quiero validar el flujo de registro de usuario
         await test.step('El usuario intenta registrarse ingresando una contraseña no válida y hace clic en "Continuar"', async () => {
             const codigoPage = new codigoVerificacionRegistro(page)
             await codigoPage.flujoRegistro(variables.urlBase)
-        });
+        })
     
         await test.step('El sistema muestra los mensajes de validación para el campo de contraseña', async () => {
             await page.getByPlaceholder('Contraseña', { exact: true }).fill(variables.passwordError)
@@ -98,14 +98,14 @@ test.describe('como automatizador quiero validar el flujo de registro de usuario
             
             await page.getByPlaceholder('Confirmar Contraseña').fill(variables.passwordWeb);
             expect(page.getByText('Las contraseñas no coinciden')).toContainText('Las contraseñas no coinciden')
-        });
-    });
+        })
+    })
     
     test('Mostrar validación del campo teléfono para caracteres especiales', async ({ page }) => {
         await test.step('El usuario intenta registrarse ingresando un teléfono no válido y hace clic en "Continuar"', async () => {
             const codigoPage = new codigoVerificacionRegistro(page)
             await codigoPage.flujoRegistro(variables.urlBase)
-        });
+        })
     
         await test.step('El sistema muestra un mensaje de error para el campo teléfono con caracteres no permitidos', async () => {
             await page.getByPlaceholder('Telefono').waitFor({ state: 'visible' })
@@ -117,14 +117,14 @@ test.describe('como automatizador quiero validar el flujo de registro de usuario
             await page.getByPlaceholder('Telefono').fill(variables.telefonoIncorrecto)
             await page.getByRole('button', { name: 'Continuar' }).click()
             expect(page.getByText('Número de teléfono')).toContainText('Número de teléfono inválido')
-        });
-    });
+        })
+    })
     
     test('Mostrar validación de usuario ya registrado', async ({ page }) => {
         await test.step('El usuario intenta registrarse con un correo electrónico ya registrado y hace clic en "Continuar"', async () => {
             const codigoPage = new codigoVerificacionRegistro(page)
             await codigoPage.flujoRegistro(variables.urlBase)
-        });
+        })
     
         await test.step('El sistema muestra un mensaje indicando que el usuario ya está registrado', async () => {
             await page.getByPlaceholder('Telefono').waitFor({ state: 'visible' })

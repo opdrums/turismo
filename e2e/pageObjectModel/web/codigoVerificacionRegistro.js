@@ -38,7 +38,7 @@ export class codigoVerificacionRegistro {
     await view1.getByRole('button', { name: 'Continuar' }).click()
   }
 
-  async obtenerCodigoConfirmacion(view2) {
+  async obtenerCodigoConfirmacion(view2, test) {
     await view2.waitForTimeout(2000)
     await view2.getByRole('link', { name: 'Refresh' }).click()
     await view2.getByRole('link', { name: 'I info@differentroads.es' }).waitFor({ state: 'visible' })
@@ -50,7 +50,7 @@ export class codigoVerificacionRegistro {
       await link.waitFor({ state: 'visible', timeout: 3000 });
       await link.click();
     }catch (error) {
-      console.log('El elemento no es visible, continuar...');
+      test.info().annotations.push({ type: 'info', description: 'No se visualizo el codigo de confirmacion'})
     }
 
     const text = await view2.locator('[id="__nuxt"] iframe').contentFrame().getByText('Your confirmation code is').textContent()

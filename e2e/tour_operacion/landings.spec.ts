@@ -1,9 +1,9 @@
-import { expect, test } from '@playwright/test'
+import {test } from '@playwright/test'
 import * as fs from 'fs'
-const { chromium } = require('playwright');
 import landings from '../pageObjectModel/tour_operacion/landings'
 
 const path = require('path')
+const { chromium } = require('playwright');
 const configPath = path.resolve(__dirname, '../../e2e/configuracion/tour_operacion/landings.json')
 const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'))
 let landing = new landings()

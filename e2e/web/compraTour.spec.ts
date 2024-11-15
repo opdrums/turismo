@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { test } from '@playwright/test'
 import compraTour from '../pageObjectModel/web/compraTour'
 import * as fs from 'fs'
 
@@ -23,7 +23,7 @@ test.describe('Como automatizador, quiero realizar el flujos de compra de un tou
     test('Flujo de compra para el plan Comfort con pago mediante transferencia bancaria', async ({ page }) => {
         const compra = new compraTour(page)
         await test.step('Seleccionar el tour y el período deseado', async () => {
-            await compra.seleccionarTouraAndPeriodo(2)
+            await compra.seleccionarTouraAndPeriodo(2, test)
         })
     
         await test.step('Completar el formulario de pasajeros - Paso 1', async () => {
@@ -49,7 +49,7 @@ test.describe('Como automatizador, quiero realizar el flujos de compra de un tou
     test('Flujo de compra para el plan Standard con pago mediante tarjeta', async ({ page }) => {
         const compra = new compraTour(page)
         await test.step('Seleccionar el tour y el período deseado', async () => {
-            await compra.seleccionarTouraAndPeriodo(2)
+            await compra.seleccionarTouraAndPeriodo(2, test)
         })
     
         await test.step('Completar el formulario de pasajeros - Paso 1', async () => {
@@ -75,7 +75,7 @@ test.describe('Como automatizador, quiero realizar el flujos de compra de un tou
     test('Flujo de compra para el plan Comfort Plus con pago de reserva', async ({ page }) => {
         const compra = new compraTour(page)
         await test.step('Seleccionar el tour y el período', async () => {
-            await compra.seleccionarTouraAndPeriodo(2)
+            await compra.seleccionarTouraAndPeriodo(2, test)
         })
     
         await test.step('Completar el formulario de pasajeros - Paso 1', async () => {
@@ -101,7 +101,7 @@ test.describe('Como automatizador, quiero realizar el flujos de compra de un tou
     test('Validación de formulario: campos vacíos durante el proceso de compra', async ({ page }) => {
         const compra = new compraTour(page)
         await test.step('Iniciar el proceso de compra seleccionando un tour y período', async () => {
-            await compra.seleccionarTouraAndPeriodo(2)
+            await compra.seleccionarTouraAndPeriodo(2, test)
         })
     
         await test.step('Verificar mensajes de error para campos obligatorios vacíos', async () => {
@@ -113,7 +113,7 @@ test.describe('Como automatizador, quiero realizar el flujos de compra de un tou
     test('Validación de formulario: fechas inválidas en el proceso de compra', async ({ page }) => {
         const compra = new compraTour(page)
         await test.step('Iniciar el proceso de compra seleccionando un tour y período', async () => {
-            await compra.seleccionarTouraAndPeriodo(2)
+            await compra.seleccionarTouraAndPeriodo(2, test)
         })
     
         await test.step('Verificar mensajes de error para fechas no válidas', async () => {

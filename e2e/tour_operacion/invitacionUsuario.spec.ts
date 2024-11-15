@@ -43,7 +43,7 @@ test.describe('Como automatizador quiero hacer el flujo de inivitaciones', () =>
             })
 
             await test.step('Abrir correo e iniciar confirmación de cuenta', async () => {
-               await invitacion.obtenerCodigoConfirmacion(view2)
+               await invitacion.obtenerCodigoConfirmacion(view2, test)
             })
     
             await test.step('Validar apertura de registro de cuenta en nueva vista', async () => {
