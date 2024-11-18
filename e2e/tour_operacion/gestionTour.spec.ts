@@ -1,4 +1,4 @@
-import {expect, test } from '@playwright/test'
+import {test } from '@playwright/test'
 import * as fs from 'fs'
 import gestionTour from '../pageObjectModel/tour_operacion/gestionTour'
 
