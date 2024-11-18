@@ -26,7 +26,7 @@ test.describe('como automatizador quiero hacer flujos de compra', () => {
         })
     
         await test.step('Completar el formulario de pasajeros - Paso 1', async () => {
-            await gestionTour.seleccionarCantidadHabitaciones();
+            await gestionTour.seleccionarCantidadHabitaciones(1, 5)
             await gestionTour.FormularioPasajeros(0, variables)
             await gestionTour.FormularioPasajeros(1, variables)
         })
@@ -52,7 +52,7 @@ test.describe('como automatizador quiero hacer flujos de compra', () => {
         })
     
         await test.step('Completar el formulario de pasajeros - Paso 1', async () => {
-            await gestionTour.seleccionarCantidadHabitaciones()
+            await gestionTour.seleccionarCantidadHabitaciones(1, 5)
             await gestionTour.FormularioPasajeros(0, variables)
             await gestionTour.FormularioPasajeros(1, variables)
         })
@@ -78,7 +78,7 @@ test.describe('como automatizador quiero hacer flujos de compra', () => {
         })
     
         await test.step('Completar el formulario de pasajeros - Paso 1', async () => {
-            await gestionTour.seleccionarCantidadHabitaciones()
+            await gestionTour.seleccionarCantidadHabitaciones(1, 5)
             await gestionTour.FormularioPasajeros(0, variables)
             await gestionTour.FormularioPasajeros(1, variables)
         })
@@ -104,7 +104,7 @@ test.describe('como automatizador quiero hacer flujos de compra', () => {
         })
     
         await test.step('Verificar mensajes de error para campos obligatorios vacíos', async () => {
-            await gestionTour.seleccionarCantidadHabitaciones()
+            await gestionTour.seleccionarCantidadHabitaciones(1, 5)
             await gestionTour.validacionCamposVacios()
         })
     })
@@ -116,7 +116,7 @@ test.describe('como automatizador quiero hacer flujos de compra', () => {
         })
     
         await test.step('Verificar mensajes de error para fechas no válidas', async () => {
-            await gestionTour.seleccionarCantidadHabitaciones()
+            await gestionTour.seleccionarCantidadHabitaciones(1, 5)
             await gestionTour.validacionFechasInvalidas()
         })
     })

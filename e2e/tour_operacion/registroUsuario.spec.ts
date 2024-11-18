@@ -15,13 +15,14 @@ test.describe('como automatizador quiero validar el flujo de registro', () => {
     let context
     let rol = "Admin de Contenidos"
 
-    test.beforeEach(async ({}) => {
+    test.beforeEach(async ({page}) => {
         const isHeadless = !! process.env.CI
         browser = await chromium.launch({ headless: isHeadless })
         context = await browser.newContext()
         view1 = await context.newPage()
         view2 = await context.newPage()
         await invitacion.abrirVistas(view1, view2, variables)
+        await page.close()
     })
     
     test.afterEach(async ({ page }) => {

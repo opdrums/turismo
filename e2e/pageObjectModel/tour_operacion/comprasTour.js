@@ -23,11 +23,11 @@ export class compraTour{
         await this.page.locator('//*[@id="period-selector"]/div/div[1]/div/div/div[5]/button').click()
     }
 
-    async seleccionarCantidadHabitaciones(){
+    async seleccionarCantidadHabitaciones(personas, habitacion){
         await this.page.waitForTimeout(2000)
-        await this.page.getByRole('button', { name: 'Selección de habitaciones ' }).nth(0).waitFor({ state: 'visible' })
-        await this.page.locator('div').filter({ hasText: /^Adultos\(Desde 12 años\)\+-$/ }).getByRole('button').nth(1).click()
-        await this.page.locator('div').filter({ hasText: /^Doble matrimonio1 cama doble\+-$/ }).getByRole('button').nth(1).click()
+        await this.page.getByRole('button', { name: 'Selección de habitaciones ' }).first().waitFor({ state: 'visible' })
+        await this.page.locator('//*[@id="input-number"]/button[2]/i').nth(personas).click()
+        await this.page.locator('//*[@id="input-number"]/button[2]/i').nth(habitacion).click()
     }
 
     async FormularioPasajeros(formulario, variables){

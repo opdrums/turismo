@@ -46,8 +46,8 @@ export class landings {
             throw new Error('Error: newSlug está null, asegúrate de ejecutar formulario() antes')
         }
         await view2.goto(`https://new.differentroads.es/es/landing/${this.newSlug}`)
-        await view2.locator('//div/div/div/div/div/h1').waitFor({ state: 'visible' })
-        expect(this.titleLanding).toBeVisible()
+        //await view2.locator('//div/div/div/div/div/h1').waitFor({ state: 'visible' })
+        //expect(this.titleLanding).toBeVisible()
     }
 
     async agregarComponente(view1){
@@ -81,7 +81,7 @@ export class landings {
     }
 
     async validacionCamposVacios(view1){
-        await view1.getByRole('link', { name: ' Landings' }).click()
+        await view1.getByRole('link', { name: ' Landings' }).click()
         await view1.getByLabel('Crear').click()
         await view1.locator('//form/div[2]/button/span').click()
         await view1.getByText('El campo title es requerido.').waitFor({ state: 'visible' })

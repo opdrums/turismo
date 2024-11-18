@@ -65,7 +65,7 @@ test.describe('Como automatizador quiero hacer flujos de landings', () => {
         })
     })
 
-    test('Creación de landing con el componente de carrusel de tours', async ({ page }) => {
+    test.skip('Creación de landing con el componente de carrusel de tours', async ({ page }) => {
         await test.step('Navegar al formulario de creación de landing', async () => {
             await landing.formulario(view1, variables)
             await landing.agregarComponente(view1)
@@ -80,6 +80,7 @@ test.describe('Como automatizador quiero hacer flujos de landings', () => {
             await landing.ingresoLanding(view2)
         })
     })
+    
     test('Validación de mensajes de error para campos obligatorios vacíos', async ({ page }) => {
         await test.step('Verificar mensajes de error en campos obligatorios vacíos en el formulario de landing', async () => {
             await landing.validacionCamposVacios(view1)

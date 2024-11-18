@@ -17,7 +17,7 @@ test.describe('Como automatizador, quiero realizar el flujos de compra de un tou
     test.afterEach(async ({ page }) => {
         await page.context().cookies(variables.urlWeb)
         await page.context().clearCookies()
-        await page.close()
+        //await page.close()
     })
 
     test('Flujo de compra para el plan Comfort con pago mediante transferencia bancaria', async ({ page }) => {
@@ -27,7 +27,7 @@ test.describe('Como automatizador, quiero realizar el flujos de compra de un tou
         })
     
         await test.step('Completar el formulario de pasajeros - Paso 1', async () => {
-            await compra.seleccionarCantidadHabitaciones();
+            await compra.seleccionarCantidadHabitaciones(1, 5)
             await compra.FormularioPasajeros(0, variables)
             await compra.FormularioPasajeros(1, variables)
         })
@@ -53,7 +53,7 @@ test.describe('Como automatizador, quiero realizar el flujos de compra de un tou
         })
     
         await test.step('Completar el formulario de pasajeros - Paso 1', async () => {
-            await compra.seleccionarCantidadHabitaciones()
+            await compra.seleccionarCantidadHabitaciones(1, 5)
             await compra.FormularioPasajeros(0, variables)
             await compra.FormularioPasajeros(1, variables)
         })
@@ -79,7 +79,7 @@ test.describe('Como automatizador, quiero realizar el flujos de compra de un tou
         })
     
         await test.step('Completar el formulario de pasajeros - Paso 1', async () => {
-            await compra.seleccionarCantidadHabitaciones()
+            await compra.seleccionarCantidadHabitaciones(1, 5)
             await compra.FormularioPasajeros(0, variables)
             await compra.FormularioPasajeros(1, variables)
         })
@@ -105,7 +105,7 @@ test.describe('Como automatizador, quiero realizar el flujos de compra de un tou
         })
     
         await test.step('Verificar mensajes de error para campos obligatorios vacíos', async () => {
-            await compra.seleccionarCantidadHabitaciones()
+            await compra.seleccionarCantidadHabitaciones(1, 5)
             await compra.validacionCamposVacios()
         })
     })
@@ -117,7 +117,7 @@ test.describe('Como automatizador, quiero realizar el flujos de compra de un tou
         })
     
         await test.step('Verificar mensajes de error para fechas no válidas', async () => {
-            await compra.seleccionarCantidadHabitaciones()
+            await compra.seleccionarCantidadHabitaciones(1, 5)
             await compra.validacionFechasInvalidas()
         })
     })
