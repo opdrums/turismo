@@ -10,7 +10,8 @@ export class gestionTour {
         this.periodoSalida = null
         this.periodoRegreso = null
         this.tipoViaje = null
-        this.descripcionHabitacion = null
+        this.nombreHabitacion = null
+        this.nombreActividad = null
     }
 
     async iniciarSessionTourOperacion(variables){
@@ -82,18 +83,27 @@ export class gestionTour {
         await this.page.getByRole('button', { name: 'Guardar', exact: true }).click()
     }
 
-    async habitaciones(){
+    async edicionHabitaciones(){
         await this.page.locator('//div[4]/div[2]/div[2]/div/button').click()
         await this.page.locator('//div[6]/div/div/div[1]/span').waitFor({ state: 'visible' })
 
         this.nombreHabitacion = await this.page.locator('//*[@id="name-input"]').getAttribute('value')
-        await this.page.locator('//*[@id="name-input"]').clear()
-        await this.page.locator('//*[@id="name-input"]').fill(this.nombreHabitacion)
-
-        /*this.descripcionHabitacion = await this.page.getByLabel('rdw-editor').locator('div').nth(2).textContent({exact: true})
-        await this.page.getByLabel('rdw-editor').locator('div').nth(2).clear({exact: true})
-        await this.page.getByLabel('rdw-editor').locator('div').nth(2).fill(this.descripcionHabitacion)*/
+        await this.page.locator('//*[@id="name-input"]').nth(1).clear()
+        await this.page.locator('//*[@id="name-input"]').nth(1).fill(this.nombreHabitacion)
         await this.page.getByRole('button', { name: 'Guardar', exact: true }).click()
+    }
+
+    async edicionActividad(test){
+        let alertActividadVisible = await this.page.getByText('No hay actividades opcionales')
+        if(await alertActividadVisible.isVisible()){
+            test.info().annotations.push({ type: 'info', description: 'El tour no contiene actividades'})
+        }else{
+            await this.page.locator('//div[4]/form/div[1]/div[4]/div[2]/div[6]/div/button').click()
+            this.nombreActividad = await this.page.locator('//*[@id="name-input"]').getAttribute('value')
+            await this.page.locator('//*[@id="name-input"]').nth(1).clear()
+            await this.page.locator('//*[@id="name-input"]').nth(1).fill(this.nombreActividad)
+            await this.page.getByRole('button', { name: 'Guardar', exact: true }).click()
+        }
     }
 
     async publicarTour(estado, test){
@@ -101,6 +111,54 @@ export class gestionTour {
             await this.page.locator('//section/main/div[4]/form/div[2]/button').click()
         }else{
             test.info().annotations.push({ type: 'info', description: `El tour no fue publicado porque el estado es ${estado}` })
+        }
+    }
+
+    async validacionCamposVaciosTour(){
+        await this.page.locator('#name-input').clear()
+        await this.page.locator('#webSlug-input').clear()
+        await this.page.locator('//section/main/div[4]/form/div[2]/button').click()
+        expect(await this.page.getByText('El campo name es requerido.')).toHaveText('El campo name es requerido.')
+        expect(await this.page.getByText('El campo webslug es requerido.')).toHaveText('El campo webslug es requerido.')
+    }
+
+    async validacionCamposVaciosPeriodo(periodo){
+        await this.page.locator('#period-selected').click()
+        await this.page.locator('//*[@id="period-selected"]').selectOption({ index: periodo })
+        await this.page.locator('//div[4]/form/div[1]/div[4]/div[2]/button').first().click()
+        await this.page.locator('//div[6]/div/div/div[1]').waitFor({ state: 'visible' })
+
+        await this.page.locator('//*[@id="name-input"]').nth(1).clear()
+        await this.page.locator('#dayOne-input').clear()
+        await this.page.locator('#returnDate-input').clear()
+        await this.page.locator('#tripType-input').clear()
+        await this.page.getByRole('button', { name: 'Guardar', exact: true }).click()
+        expect(await this.page.getByText('El campo name es requerido.')).toHaveText('El campo name es requerido.')
+        expect(await this.page.getByText('El campo dayone es requerido.')).toHaveText('El campo dayone es requerido.')
+        expect(await this.page.getByText('El campo returndate es requerido.')).toHaveText('El campo returndate es requerido.')
+        expect(await this.page.getByText('El campo triptype es requerido.')).toHaveText('El campo triptype es requerido.')
+        await this.page.getByRole('button', { name: '×', exact: true }).click()
+    }
+
+    async validacionCamposVaciosHabitacion(){
+        await this.page.locator('//div[4]/div[2]/div[2]/div/button').click()
+        await this.page.locator('//div[6]/div/div/div[1]/span').waitFor({ state: 'visible' })
+        await this.page.locator('//*[@id="name-input"]').nth(1).clear()
+        await this.page.getByRole('button', { name: 'Guardar', exact: true }).click()
+        expect(await this.page.getByText('El campo name es requerido.')).toHaveText('El campo name es requerido.')
+        await this.page.getByRole('button', { name: '×', exact: true }).click()
+    }
+
+    async validacionCamposVaciosActividad(test){
+        let alertActividadVisible = await this.page.getByText('No hay actividades opcionales')
+        if(await alertActividadVisible.isVisible()){
+            test.info().annotations.push({ type: 'info', description: 'El tour no contiene actividades'})
+        }else{
+            await this.page.locator('//div[4]/form/div[1]/div[4]/div[2]/div[6]/div/button').click()
+            await this.page.locator('//*[@id="name-input"]').nth(1).clear()
+            await this.page.getByRole('button', { name: 'Guardar', exact: true }).click()
+            expect(await this.page.getByText('El campo name es requerido.')).toHaveText('El campo name es requerido.')
+            await this.page.getByRole('button', { name: '×', exact: true }).click()
         }
     }
 }
