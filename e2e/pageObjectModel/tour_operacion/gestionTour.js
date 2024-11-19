@@ -25,6 +25,7 @@ export class gestionTour {
     async sincronizacionTour(test){
         await this.page.getByLabel('Sinc').waitFor({ state: 'visible' })
         await this.page.getByLabel('Sinc').click()
+        await this.page.waitForTimeout(2000)
         
         let tourVisible = await this.page.locator('//div[2]/div/div[1]/div[2]/div/div/div[2]/div/div[1]/span')
         if(await tourVisible.isVisible()){

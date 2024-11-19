@@ -36,7 +36,7 @@ test.describe('como automatizador quiero validar el flujo de registro', () => {
             await invitacion.iniciarSessionTourOperacion(view1,variables)
             await invitacion.obtenerEmailProvicional(view2)
             await invitacion.seleccionarRol(view1, rol)
-            await invitacion.obtenerCodigoConfirmacion(view2)
+            await invitacion.obtenerCodigoConfirmacion(view2, test)
         })
 
         await test.step('flujo de invitacion Exitoso', async () => {
@@ -49,7 +49,7 @@ test.describe('como automatizador quiero validar el flujo de registro', () => {
             await invitacion.iniciarSessionTourOperacion(view1,variables)
             await invitacion.obtenerEmailProvicional(view2)
             await invitacion.seleccionarRol(view1, rol)
-            await invitacion.obtenerCodigoConfirmacion(view2)
+            await invitacion.obtenerCodigoConfirmacion(view2, test)
         })
 
         await test.step('Intentar completar registro sin llenar campos', async () => {
@@ -62,7 +62,7 @@ test.describe('como automatizador quiero validar el flujo de registro', () => {
             await invitacion.iniciarSessionTourOperacion(view1,variables)
             await invitacion.obtenerEmailProvicional(view2)
             await invitacion.seleccionarRol(view1, rol)
-            await invitacion.obtenerCodigoConfirmacion(view2)
+            await invitacion.obtenerCodigoConfirmacion(view2, test)
         })
 
         await test.step('Verificar mensaje de error de usuario ya registrado', async () => {
@@ -75,7 +75,7 @@ test.describe('como automatizador quiero validar el flujo de registro', () => {
             await invitacion.iniciarSessionTourOperacion(view1,variables)
             await invitacion.obtenerEmailProvicional(view2)
             await invitacion.seleccionarRol(view1, rol)
-            await invitacion.obtenerCodigoConfirmacion(view2)
+            await invitacion.obtenerCodigoConfirmacion(view2, test)
         })
 
         await test.step('Verificar mensaje de error de contraseña incorrecta', async () => {
