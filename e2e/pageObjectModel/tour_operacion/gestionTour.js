@@ -28,7 +28,7 @@ export class gestionTour {
         await this.page.waitForTimeout(2000)
         
         let tourVisible = await this.page.locator('//div[2]/div/div[1]/div[2]/div/div/div[2]/div/div[1]/span')
-        if(await tourVisible.isVisible()){
+        if(await tourVisible.isVisible()) {
             this.nombreTour = (await this.page.locator('//div[2]/div/div[1]/div[2]/div/div/div[2]/div/div[1]/span').textContent()).trim()
             await this.page.locator('div').filter({
                 hasText: new RegExp(`^${this.nombreTour.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*(.*)$`)
@@ -38,6 +38,7 @@ export class gestionTour {
             await this.page.locator('//body/main/section/main/div[3]').waitFor({ state: 'visible' })
         }else {
             test.info().annotations.push({ type: 'info', description: 'No se visualiza tour para sincronizar'})
+            throw new Error('Error: Fallo No se visualiza tour para sincronizar')
         }
     }
 

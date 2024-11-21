@@ -1,11 +1,11 @@
-import {  expect,test } from "@playwright/test";
+import {  expect, test } from "@playwright/test"
 import * as fs from 'fs'
-const { chromium } = require('playwright');
+const { chromium } = require('playwright')
 import invitacionUsuario from '../../e2e/pageObjectModel/tour_operacion/invitacionUsuario'
 
-const path = require('path');
-const configPath = path.resolve(__dirname, '../../e2e/configuracion/tour_operacion/invitacionUsuario.json');
-const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+const path = require('path')
+const configPath = path.resolve(__dirname, '../../e2e/configuracion/tour_operacion/invitacionUsuario.json')
+const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'))
 let invitacion = new invitacionUsuario()
 
 test.describe('como automatizador quiero validar el flujo de registro', () => {
