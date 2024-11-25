@@ -1,3 +1,6 @@
+import * as dotenv from 'dotenv'
+dotenv.config()
+
 export class codigoVerificacionRegistro {
   constructor(page) {
     this.page = page
@@ -10,8 +13,8 @@ export class codigoVerificacionRegistro {
     view2.setDefaultTimeout(120000)
 
     await Promise.all([
-      view1.goto(variables.urlBase),
-      view2.goto(variables.urlMail)
+      view1.goto(`${process.env.baseUrlWeb}`),
+      view2.goto(`${process.env.baseUrlMail}`)
     ])
   }
 

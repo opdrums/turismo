@@ -1,17 +1,19 @@
 import { expect, test } from '@playwright/test'
 import * as fs from 'fs'
+import * as dotenv from 'dotenv'
 
-const path = require('path');
-const configPath = path.resolve(__dirname, '../../e2e/configuracion/tour_operacion/login.json');
-const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+const path = require('path')
+const configPath = path.resolve(__dirname, '../../e2e/configuracion/tour_operacion/login.json')
+const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'))
+dotenv.config()
 
 test.describe('Como automatizador quiero crear casos de pruebas para el login', () => {
     test.beforeEach(async ({ page }) => {
-        await page.goto(variables.urlBase)
+        await page.goto(`${process.env.baseUrlMiddle}`)
     })
  
     test.afterEach(async ({ page }) => {
-        await page.context().cookies(variables.urlBase)
+        await page.context().cookies(`${process.env.baseUrlMiddle}`)
         await page.context().clearCookies()
         await page.close()
     })

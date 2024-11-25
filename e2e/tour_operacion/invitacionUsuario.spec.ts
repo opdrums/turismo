@@ -1,16 +1,17 @@
 import { test } from "@playwright/test";
 import invitacionUsuario from '../pageObjectModel/tour_operacion/invitacionUsuario'
 import * as fs from 'fs'
-
+import * as dotenv from 'dotenv'
 
 const path = require('path')
 const { chromium } = require('playwright')
 const configPath = path.resolve(__dirname, '../../e2e/configuracion/tour_operacion/invitacionUsuario.json')
 const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'))
+dotenv.config()
 
 test.describe('Como automatizador quiero hacer el flujo de inivitaciones', () => {
     test.afterEach(async ({ page }) => {
-        await page.context().cookies(variables.urlBase)
+        await page.context().cookies(`${process.env.baseUrlMiddle}`)
         await page.context().clearCookies()
         await page.close()
     })

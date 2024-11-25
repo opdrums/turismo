@@ -1,17 +1,18 @@
 import { expect, test } from '@playwright/test'
 import codigoVerificacionRegistro from '../pageObjectModel/web/codigoVerificacionRegistro'
 import * as fs from 'fs'
-
+import * as dotenv from 'dotenv'
 
 const path = require('path')
 const { chromium } = require('playwright')
 const configPath = path.resolve(__dirname, '../../e2e/configuracion/web/registroUsuario.json')
 const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'))
 const codigos = new codigoVerificacionRegistro()
+dotenv.config()
 
 test.describe('como automatizador quiero validar el flujo de registro de usuario', () => {    
     test.afterEach(async ({ page }) => {
-        await page.context().cookies(variables.urlBase)
+        await page.context().cookies(`${process.env.baseUrlWeb}`)
         await page.context().clearCookies()
     })
 

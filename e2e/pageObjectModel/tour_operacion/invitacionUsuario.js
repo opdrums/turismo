@@ -1,4 +1,6 @@
-import { expect } from '@playwright/test';
+import { expect } from '@playwright/test'
+import * as dotenv from 'dotenv'
+dotenv.config()
 
 export class invitacionUsuario {
     constructor(page){
@@ -11,8 +13,8 @@ export class invitacionUsuario {
         view2.setDefaultTimeout(230000)
     
         await Promise.all([
-          view1.goto(variables.urlBase),
-          view2.goto(variables.urlMail)
+          view1.goto(`${process.env.baseUrlMiddle}`),
+          view2.goto(`${process.env.baseUrlMail}`)
         ])
     }
     

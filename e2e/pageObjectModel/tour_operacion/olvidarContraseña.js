@@ -1,4 +1,6 @@
 import { expect} from "@playwright/test"
+import * as dotenv from 'dotenv'
+dotenv.config()
 
 export class olvidarContraseña {
   constructor(page) {
@@ -11,8 +13,8 @@ export class olvidarContraseña {
     view2.setDefaultTimeout(120000)
 
     await Promise.all([
-      view1.goto(variables.urlTour),
-      view2.goto(variables.urlTeam)
+      view1.goto(`${process.env.baseUrlMiddle}`),
+      view2.goto(`${process.env.baseUrlMicroSoft}`)
     ])
   }
 
@@ -26,9 +28,9 @@ export class olvidarContraseña {
 
   async iniciarSesionMicrosoft(view2, variables) {
     await view2.getByRole('button', { name: 'Siguiente' }).waitFor({ state: 'visible' })
-    await view2.locator('//*[@id="i0116"]').fill(variables.email)
+    await view2.locator('//*[@id="i0116"]').fill(`${process.env.emailMicroSoft}`)
     await view2.getByRole('button', { name: 'Siguiente' }).click()
-    await view2.locator('//*[@id="i0118"]').fill(variables.password)
+    await view2.locator('//*[@id="i0118"]').fill(`${process.env.passwordMicroSoft}`)
     await view2.getByRole('button', { name: 'Iniciar sesión' }).click()
     await view2.getByRole('button', { name: 'No' }).click()
   }

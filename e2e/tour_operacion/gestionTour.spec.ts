@@ -1,19 +1,21 @@
 import {test } from '@playwright/test'
 import * as fs from 'fs'
 import gestionTour from '../pageObjectModel/tour_operacion/gestionTour'
+import * as dotenv from 'dotenv'
 
 const path = require('path')
 const configPath = path.resolve(__dirname, '../../e2e/configuracion/tour_operacion/gestionTour.json')
 const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'))
+dotenv.config()
 
 test.describe('Como automatizador quiero hacer flujos de gestion de tour', () => {
 
     test.beforeEach(async ({ page }) => {
-        await page.goto(variables.urlBase)
+        await page.goto(`${process.env.baseUrlMiddle}`)
     })
 
     test.afterEach(async ({ page }) => {
-        await page.context().cookies(variables.urlBase)
+        await page.context().cookies(`${process.env.baseUrlMiddle}`)
         await page.context().clearCookies()
         await page.close()
     })

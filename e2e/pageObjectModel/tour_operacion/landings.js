@@ -1,4 +1,6 @@
-import { expect } from "@playwright/test";
+import { expect } from "@playwright/test"
+import * as dotenv from 'dotenv'
+dotenv.config()
 
 export class landings {
 
@@ -10,7 +12,7 @@ export class landings {
 
     async abrirVistas(variables) {
         this.page.setDefaultTimeout(120000)
-        this.page.goto(variables.urlWeb)
+        this.page.goto(`${process.env.baseUrlMiddle}`)
     }
 
     async login(variables) {

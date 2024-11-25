@@ -1,13 +1,15 @@
 import { expect, test } from '@playwright/test'
 import * as fs from 'fs'
+import * as dotenv from 'dotenv'
 
-const path = require('path');
+const path = require('path')
 const configPath = path.resolve(__dirname, '../../e2e/configuracion/web/login.json');
 const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+dotenv.config()
 
 test.describe('Como automatizador, quiero realizar el flujo de inicio de session', () => {
     test.beforeEach(async ({ page }) => {
-        await page.goto(variables.urlWeb)
+        await page.goto(`${process.env.baseUrlWeb}`)
         await page.getByRole('link', { name: 'Iniciar sesión' }).click()
     })
 

@@ -1,16 +1,18 @@
 import { test } from '@playwright/test'
 import * as fs from 'fs'
-import olvidarContraseña from '../pageObjectModel/tour_operacion/olvidarContraseña';
+import olvidarContraseña from '../pageObjectModel/tour_operacion/olvidarContraseña'
+import * as dotenv from 'dotenv'
 
 const { chromium } = require('playwright')
 const path = require('path');
-const configPath = path.resolve(__dirname, '../../e2e/configuracion/tour_operacion/olvidarContraseña.json');
+const configPath = path.resolve(__dirname, '../../e2e/configuracion/tour_operacion/olvidarContraseña.json')
 const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'))
+dotenv.config()
 
 test.describe('Como automatizador quiero crear casos de olvidar contraseña', () => {
 
     test.afterEach(async ({ page }) => {
-        await page.context().cookies(variables.urlBase)
+        await page.context().cookies(`${process.env.baseUrlMiddle}`)
         await page.context().clearCookies()
         await page.close()
     })

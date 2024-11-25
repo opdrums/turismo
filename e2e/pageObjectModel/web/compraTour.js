@@ -1,4 +1,6 @@
 import { expect } from "@playwright/test"
+import * as dotenv from 'dotenv'
+dotenv.config()
 
 export class compraTour{
     constructor(page) {
@@ -6,7 +8,7 @@ export class compraTour{
     }
 
     async loginUser(variables){
-        await this.page.goto(variables.urlWeb)
+        await this.page.goto(`${process.env.baseUrlWeb}`)
         await this.page.getByRole('link', { name: 'Iniciar sesión' }).click()
         await this.page.getByPlaceholder('E-mail').fill(variables.email)
         await this.page.getByPlaceholder('Contraseña').fill(variables.password)

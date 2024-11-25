@@ -1,4 +1,6 @@
 import { expect } from "@playwright/test"
+import * as dotenv from 'dotenv'
+dotenv.config()
 
 export class compraTour{
     constructor(page) {
@@ -6,7 +8,7 @@ export class compraTour{
     }
 
     async loginUser(variables){
-        await this.page.goto(variables.urlWeb)
+        await this.page.goto(`${process.env.baseUrlMiddle}`)
         await this.page.setDefaultTimeout(400000)
         await this.page.locator('#user').fill(variables.userName)
         await this.page.locator('#password').fill(variables.password)

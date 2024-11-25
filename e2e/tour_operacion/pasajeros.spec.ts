@@ -1,14 +1,16 @@
 import { expect, test } from "@playwright/test"
 import * as fs from 'fs'
-import reservaTour from "../pageObjectModel/tour_operacion/reservas"
+import * as dotenv from 'dotenv'
 
 const path = require('path')
 const configPath = path.resolve(__dirname, '../../e2e/configuracion/tour_operacion/pasajero.json')
 const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'))
+dotenv.config()
+
 
 test.describe('Como automatizador quiero hacer los flujos del modulo de pasajero', () => {
     test.beforeEach(async ({ page }) => {
-        await page.goto(variables.urlTour)
+        await page.goto(`${process.env.baseUrlMiddle}`)
         await page.locator('#user').fill(variables.userName)
         await page.locator('#password').fill(variables.password)
         await page.getByRole('button', { name: 'Entrar'}).click()
@@ -18,7 +20,7 @@ test.describe('Como automatizador quiero hacer los flujos del modulo de pasajero
     })
 
     test.afterEach(async ({ page }) => {
-        await page.context().cookies(variables.urlBase)
+        await page.context().cookies(`${process.env.baseUrlMiddle}`)
         await page.context().clearCookies()
         await page.close()
     })

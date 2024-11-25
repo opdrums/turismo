@@ -1,11 +1,12 @@
 import { test } from '@playwright/test'
 import compraTour from '../pageObjectModel/web/compraTour'
 import * as fs from 'fs'
+import * as dotenv from 'dotenv'
 
 const path = require('path')
 const configPath = path.resolve(__dirname, '../../e2e/configuracion/web/compras.json')
 const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'))
-
+dotenv.config()
 
 test.describe('Como automatizador, quiero realizar el flujos de compra de un tour', () => {
 
@@ -15,7 +16,7 @@ test.describe('Como automatizador, quiero realizar el flujos de compra de un tou
     });
 
     test.afterEach(async ({ page }) => {
-        await page.context().cookies(variables.urlWeb)
+        await page.context().cookies(`${process.env.baseUrlWeb}`)
         await page.context().clearCookies()
         //await page.close()
     })

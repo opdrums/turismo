@@ -1,11 +1,13 @@
 import {  expect, test } from "@playwright/test"
 import * as fs from 'fs'
-const { chromium } = require('playwright')
 import invitacionUsuario from '../../e2e/pageObjectModel/tour_operacion/invitacionUsuario'
+import * as dotenv from 'dotenv'
 
 const path = require('path')
 const configPath = path.resolve(__dirname, '../../e2e/configuracion/tour_operacion/invitacionUsuario.json')
 const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'))
+const { chromium } = require('playwright')
+dotenv.config()
 let invitacion = new invitacionUsuario()
 
 test.describe('como automatizador quiero validar el flujo de registro', () => {
@@ -26,7 +28,7 @@ test.describe('como automatizador quiero validar el flujo de registro', () => {
     })
     
     test.afterEach(async ({ page }) => {
-        await page.context().cookies(variables.urlBase)
+        await page.context().cookies(`${process.env.baseUrlMiddle}`)
         await page.context().clearCookies()
         await page.close()
     })

@@ -1,10 +1,12 @@
 import {test } from '@playwright/test'
 import * as fs from 'fs'
 import landings from '../pageObjectModel/tour_operacion/landings'
+import * as dotenv from 'dotenv'
 
 const path = require('path')
 const configPath = path.resolve(__dirname, '../../e2e/configuracion/tour_operacion/landings.json')
 const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'))
+dotenv.config()
 
 test.describe('Como automatizador quiero hacer flujos de landings', () => {
     test.beforeEach(async ({ page }) => {
@@ -14,7 +16,7 @@ test.describe('Como automatizador quiero hacer flujos de landings', () => {
     })
 
     test.afterEach(async ({ page }) => {
-        await page.context().cookies(variables.urlBase)
+        await page.context().cookies(`${process.env.baseUrlMiddle}`)
         await page.context().clearCookies()
         await page.close()
     })

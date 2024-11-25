@@ -1,4 +1,6 @@
 import { expect } from "@playwright/test"
+import * as dotenv from 'dotenv'
+dotenv.config()
 
 class reservaTour{
     constructor(page){
@@ -6,7 +8,7 @@ class reservaTour{
     }
 
     async loginUser(variables){
-        await this.page.goto(variables.urlTour)
+        await this.page.goto(`${process.env.baseUrlMiddle}`)
         await this.page.locator('#user').fill(variables.userName)
         await this.page.locator('#password').fill(variables.password)
         await this.page.getByRole('button', { name: 'Entrar'}).click()
