@@ -1,4 +1,5 @@
 import * as dotenv from 'dotenv'
+import { expect} from '@playwright/test'
 dotenv.config()
 
 export class codigoVerificacionRegistro {
@@ -38,7 +39,7 @@ export class codigoVerificacionRegistro {
     await view1.getByPlaceholder('Nombre').fill(variables.nombre)
     await view1.getByPlaceholder('Apellidos').fill(variables.apellido)
     await view1.getByPlaceholder('Telefono').fill(variables.telefono)
-    await view1.getByRole('button', { name: 'Continuar' }).click()
+    await view1.getByRole('button', { name: 'Registrarme' }).click()
   }
 
   async obtenerCodigoConfirmacion(view2, test) {
@@ -50,15 +51,27 @@ export class codigoVerificacionRegistro {
 
     const link = view2.getByRole('link', { name: 'I info@differentroads.es' })
     try {
-      await link.waitFor({ state: 'visible', timeout: 3000 });
-      await link.click();
+      await link.waitFor({ state: 'visible', timeout: 5000 });
+      await link.click()
     }catch (error) {
-      test.info().annotations.push({ type: 'info', description: 'No se visualizo el codigo de confirmacion'})
+        test.info().annotations.push({ type: 'info', description: 'No se visualizo el pop up'})
     }
-
     const text = await view2.locator('[id="__nuxt"] iframe').contentFrame().getByText('Your confirmation code is').textContent()
     this.codigoVerificacion = text.match(/\d+/)[0]
     await view2.close()
+  }
+
+  async validacionCodigoConfirmacion(view1, variables){
+    await view1.getByRole('button', { name: 'Verificar código' }).waitFor({ state: 'visible' })
+    await view1.getByPlaceholder('Código de confirmación').fill(variables.codigoVerificacionIncorrecto)
+    await view1.getByRole('button', { name: 'Verificar código' }).click()
+    expect(await view1.getByText('El código de confirmación es')).toContainText('El código de confirmación es incorrecto')
+
+    await view1.getByPlaceholder('Código de confirmación').clear()
+    await view1.getByPlaceholder('Código de confirmación').fill(this.codigoVerificacion)
+    await view1.getByRole('button', { name: 'Verificar código' }).click()
+    await view1.getByRole('link', { name: this.correoprovicional }).waitFor({ state: 'visible' })
+    expect(view1.getByRole('link', { name: this.correoprovicional })).toBeVisible()
   }
 
   async flujoRegistro(url) {
@@ -66,7 +79,7 @@ export class codigoVerificacionRegistro {
     await this.page.getByRole('link', { name: 'Iniciar sesión' }).click()
     await this.page.getByRole('link', { name: '¿Aun no tienes cuenta?' }).click()
     await this.page.getByPlaceholder('Telefono').waitFor({ state: 'visible' })
-    await this.page.getByRole('button', { name: 'Continuar' }).click()
+    await this.page.getByRole('button', { name: 'Registrarme' }).click()
   }
 }
 

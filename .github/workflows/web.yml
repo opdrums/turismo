@@ -24,7 +24,7 @@ jobs:
       run: npx playwright install --with-deps
 
     - name: Run Playwright tests web-side
-      env: # Configuración de variables de entorno desde secretos
+      env:
         BASE_URL_WEB: ${{ secrets.BASE_URL_WEB }}
         BASE_URL_WEB_ADMIN: ${{ secrets.BASE_URL_WEB_ADMIN }}
         BASE_URL_MIDDLE: ${{ secrets.BASE_URL_MIDDLE }}

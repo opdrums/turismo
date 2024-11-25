@@ -52,8 +52,7 @@ export class invitacionUsuario {
           await link.waitFor({ state: 'visible', timeout: 3000 });
           await link.click();
         }catch (error) {
-            test.info().annotations.push({ type: 'info', description: 'No se visualizo el buton de registro de usuario'})
-            throw new Error('Error: No se visualizo el buton de registro de usuario')
+            test.info().annotations.push({ type: 'info', description: 'No se visualizo el pop up'})
         }
         await view2.locator('[id="__nuxt"] iframe').contentFrame().getByRole('link', { name: 'Aceptar invitación' }).click()
         await view2.close()

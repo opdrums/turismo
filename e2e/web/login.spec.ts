@@ -14,16 +14,16 @@ test.describe('Como automatizador, quiero realizar el flujo de inicio de session
     })
 
     test.afterEach(async ({ page }) => {
-        await page.context().cookies(variables.urlWeb);
+        await page.context().cookies(`${process.env.baseUrlWeb}`);
         await page.context().clearCookies()
         await page.close()
     })
     
     test('Inicio de session exitoso', async ({ page }) => {
         await test.step('Dado que el usuario ingresa las credenciales', async () => {
-            await page.getByPlaceholder('E-mail').fill(variables.emailWeb);
-            await page.getByPlaceholder('Contraseña').fill(variables.passwordWeb);
-            await page.getByRole('button', { name: 'Continuar' }).click();
+            await page.getByPlaceholder('E-mail').fill(variables.emailWeb)
+            await page.getByPlaceholder('Contraseña').fill(variables.passwordWeb)
+            await page.getByRole('button', { name: 'Iniciar sesión' }).click()
         })
 
         await test.step('el sistema redirecciona a la vista de compras de tour', async () => {
@@ -34,9 +34,9 @@ test.describe('Como automatizador, quiero realizar el flujo de inicio de session
 
     test('Mostrar mensaje de error cuando la contraseña es incorrecta. ', async ({ page }) => {
         await test.step('Dado que el usuario ingresa las credenciales', async () => {
-            await page.getByPlaceholder('E-mail').fill(variables.emailWeb);
-            await page.getByPlaceholder('Contraseña').fill(variables.passwordError);
-            await page.getByRole('button', { name: 'Continuar' }).click();
+            await page.getByPlaceholder('E-mail').fill(variables.emailWeb)
+            await page.getByPlaceholder('Contraseña').fill(variables.passwordError)
+            await page.getByRole('button', { name: 'Iniciar sesión' }).click()
         })
 
         await test.step('el sistema muestra el mensaje de error "La contraseña es incorrecta. Por favor, intente nuevamente.', async () => {
@@ -47,7 +47,7 @@ test.describe('Como automatizador, quiero realizar el flujo de inicio de session
      
     test('Mostrar mensaje de error cuando los campos de inicio de sesión están vacíos.', async ({ page }) => {
         await test.step('Dado que el usuario no ingresa las credenciales', async () => {
-            await page.getByRole('button', { name: 'Continuar' }).click();
+            await page.getByRole('button', { name: 'Iniciar sesión' }).click()
         })
         await test.step('el sistema debe mostrar un mensaje de advertencia indicando que los campos son obligatorios', async () => {
             expect(page.getByText('El nombre de usuario es')).toContainText('El nombre de usuario es obligatorio.')
@@ -59,7 +59,7 @@ test.describe('Como automatizador, quiero realizar el flujo de inicio de session
         await test.step('Dado que el usuario no ingresa las credenciales', async () => {
             await page.getByPlaceholder('E-mail').fill(variables.usuarioSinRegistrar);
             await page.getByPlaceholder('Contraseña').fill(variables.passwordWeb);
-            await page.getByRole('button', { name: 'Continuar' }).click();
+            await page.getByRole('button', { name: 'Iniciar sesión' }).click()
         })
 
         await test.step('el sistema debe mostrar un mensaje de advertencia indicando usuario no ha confirmado', async () => {

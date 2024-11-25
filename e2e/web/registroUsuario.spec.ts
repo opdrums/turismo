@@ -17,7 +17,7 @@ test.describe('como automatizador quiero validar el flujo de registro de usuario
     })
 
     test('Registro de usuario exitoso', async ({page}) => {
-        const isHeadless = !!process.env.CI
+        const isHeadless = !! process.env.CI
         const browser = await chromium.launch({ headless: isHeadless })
         const context = await browser.newContext()
         const view1 = await context.newPage()
@@ -46,19 +46,7 @@ test.describe('como automatizador quiero validar el flujo de registro de usuario
         })
     
         await test.step('Ingresar el código de confirmación en la vista 1', async () => {
-            await view1.getByRole('button', { name: 'Verificar código' }).waitFor({ state: 'visible' })
-            await view1.getByPlaceholder('Código de confirmación').fill(variables.codigoVerificacionIncorrecto)
-            await view1.getByRole('button', { name: 'Verificar código' }).click()
-            expect(view1.getByText('El código de confirmación es')).toContainText('El código de confirmación es incorrecto')
-    
-            await view1.getByPlaceholder('Código de confirmación').clear()
-            await view1.getByPlaceholder('Código de confirmación').fill(codigos.codigoVerificacion) // Utiliza el código de confirmación obtenido
-            await view1.getByRole('button', { name: 'Verificar código' }).click()
-        })
-    
-        await test.step('Validar redirección a la vista de compras de tours', async () => {
-            await view1.getByRole('link', { name: codigos.correoprovicional }).waitFor({ state: 'visible' })
-            expect(view1.getByRole('link', { name: codigos.correoprovicional })).toBeVisible()
+            await codigos.validacionCodigoConfirmacion(view1, variables)
         })
     })
     
@@ -66,7 +54,7 @@ test.describe('como automatizador quiero validar el flujo de registro de usuario
     test('Mostrar validacion de Campos vacíos y obligatorios', async ({ page }) => {
         await test.step('El usuario intenta registrarse sin completar los campos y hace clic en "Continuar"', async () => {
             const codigoPage = new codigoVerificacionRegistro(page)
-            await codigoPage.flujoRegistro(variables.urlBase)
+            await codigoPage.flujoRegistro(`${process.env.baseUrlWeb}`)
         })
     
         await test.step('El sistema muestra mensajes indicando los campos obligatorios que están vacíos', async () => {
@@ -82,7 +70,7 @@ test.describe('como automatizador quiero validar el flujo de registro de usuario
     test('Mostrar validación de requisitos para el campo de contraseña', async ({ page }) => {
         await test.step('El usuario intenta registrarse ingresando una contraseña no válida y hace clic en "Continuar"', async () => {
             const codigoPage = new codigoVerificacionRegistro(page)
-            await codigoPage.flujoRegistro(variables.urlBase)
+            await codigoPage.flujoRegistro(`${process.env.baseUrlWeb}`)
         })
     
         await test.step('El sistema muestra los mensajes de validación para el campo de contraseña', async () => {
@@ -105,7 +93,7 @@ test.describe('como automatizador quiero validar el flujo de registro de usuario
     test('Mostrar validación del campo teléfono para caracteres especiales', async ({ page }) => {
         await test.step('El usuario intenta registrarse ingresando un teléfono no válido y hace clic en "Continuar"', async () => {
             const codigoPage = new codigoVerificacionRegistro(page)
-            await codigoPage.flujoRegistro(variables.urlBase)
+            await codigoPage.flujoRegistro(`${process.env.baseUrlWeb}`)
         })
     
         await test.step('El sistema muestra un mensaje de error para el campo teléfono con caracteres no permitidos', async () => {
@@ -116,7 +104,7 @@ test.describe('como automatizador quiero validar el flujo de registro de usuario
             await page.getByPlaceholder('Nombre').fill(variables.nombre)
             await page.getByPlaceholder('Apellidos').fill(variables.apellido)
             await page.getByPlaceholder('Telefono').fill(variables.telefonoIncorrecto)
-            await page.getByRole('button', { name: 'Continuar' }).click()
+            await page.getByRole('button', { name: 'Registrarme' }).click()
             expect(page.getByText('Número de teléfono')).toContainText('Número de teléfono inválido')
         })
     })
@@ -124,7 +112,7 @@ test.describe('como automatizador quiero validar el flujo de registro de usuario
     test('Mostrar validación de usuario ya registrado', async ({ page }) => {
         await test.step('El usuario intenta registrarse con un correo electrónico ya registrado y hace clic en "Continuar"', async () => {
             const codigoPage = new codigoVerificacionRegistro(page)
-            await codigoPage.flujoRegistro(variables.urlBase)
+            await codigoPage.flujoRegistro(`${process.env.baseUrlWeb}`)
         })
     
         await test.step('El sistema muestra un mensaje indicando que el usuario ya está registrado', async () => {
@@ -135,7 +123,7 @@ test.describe('como automatizador quiero validar el flujo de registro de usuario
             await page.getByPlaceholder('Nombre').fill(variables.nombre)
             await page.getByPlaceholder('Apellidos').fill(variables.apellido)
             await page.getByPlaceholder('Telefono').fill(variables.telefono)
-            await page.getByRole('button', { name: 'Continuar' }).click()
+            await page.getByRole('button', { name: 'Registrarme' }).click()
             await page.getByText('User already exists').waitFor({ state: 'visible' })
             expect(page.getByText('User already exists')).toContainText('User already exists')
         })
