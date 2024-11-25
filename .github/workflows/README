@@ -1,7 +1,0 @@
-* Poceso para que leer variables de entorno:
-    intalar la libreria: npm install dotenv
-
-* Hay que crear un archivo .env en la raiz del proyecto, con estas variables:
-    baseUrlWeb:https://new.differentroads.es/es
-    baseUrlMiddle: https://middle.differentroads.es/es
-
