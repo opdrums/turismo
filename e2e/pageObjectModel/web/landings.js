@@ -20,6 +20,7 @@ export class landings {
         await this.page.locator('#password').fill(variables.password);
         await this.page.getByRole('button', { name: 'Entrar' }).click();*/
         await this.page.getByRole('link', { name: ' Landings' }).waitFor({ state: 'visible' })
+        await this.page.getByRole('link', { name: ' Landings' }).click({force: true })
     }
 
     async formulario(variables) {
@@ -27,29 +28,26 @@ export class landings {
         const slugAleatorio = slug[Math.floor(Math.random() * slug.length)]
         const numeroAleatorio = Math.floor(1000 + Math.random() * 9000)
 
-        await this.page.getByRole('link', { name: ' Landings' }).click({force: true })
         await this.page.getByLabel('Crear').click()
-
         await this.page.locator('#title-input').fill(`${slugAleatorio}${numeroAleatorio}`, { force: true })
+        await this.page.locator('#bannerTitle-input').fill(`${slugAleatorio}${numeroAleatorio}`, { force: true })
+        await this.page.locator('input[type="file"]').setInputFiles(process.env.urlImagen);
+        await this.page.locator('#banner-alttext-input').fill(`${slugAleatorio}${numeroAleatorio}`, { force: true })
         await this.page.locator('#slug-input').fill(`${slugAleatorio}${numeroAleatorio}`, { force: true })
-        await this.page.locator('//div[4]/div/div[2]/div/div/div[2]/div/div/div').fill(variables.descripcionSlug)
+        await this.page.locator('//div[2]/div/div/div/div/div/div/span').first().fill(`${slugAleatorio}${numeroAleatorio}`, { force: true })
         await this.page.locator('[id="seo\\.title-input"]').fill(`${slugAleatorio}${numeroAleatorio}`, { force: true })
         await this.page.locator('//div/div[2]/div/div[2]/div/div/div[2]/div/div/div').fill(variables.descripcionSeo)
-        this.titleLanding = await this.page.locator('#title-input').inputValue()
         this.newSlug = await this.page.locator('#slug-input').inputValue()
     }
 
     async ingresoLanding() {
-        if (!this.newSlug) {
-            throw new Error('Error: newSlug está null, asegúrate de ejecutar formulario() antes')
-        }
-        const slugLimpio = this.newSlug.trim()
-        await this.page.goto(`https://new.differentroads.es/es/landing/${slugLimpio}`)
+       await this.page.getByRole('link', { name: 'Ver ' }).click()
         expect( await this.page.locator('//body/header/div[2]/ul')).toBeVisible()
     }
 
     async agregarComponente(){
         await this.page.getByRole('button', { name: 'Agregar componente' }).click()
+        await this.page.locator('input[name="nameBlock"]').nth(0).waitFor({ state: 'visible' })
         await this.page.locator('input[name="nameBlock"]').nth(0).fill(this.newSlug)
     }
 
@@ -60,31 +58,60 @@ export class landings {
         await this.page.locator('[id="blocks\\[0\\]\\.subtitle-input"]').fill(variables.descripcionBanner)
     }
 
-    async formularioIntroText(variables){
-        await this.page.locator('div').filter({ hasText: /^Landing intro text$/ }).first().click()
-        await this.page.getByRole('button', { name: 'Agregar', exact: true }).click()
-        await this.page.locator('//*[@id="blocks[0].title-input"]').fill(variables.tituloIntroText)
-        await this.page.locator('//div/div[2]/div[2]/div[2]/div/div[2]/div/div/div[2]/div/div/div').fill(variables.desciptionIntroText)
+    async eliminarLanding(confirmacion, landing, test) {
+        if (confirmacion == 'si'){
+            const landingSelector = `//main/div[2]/div/div[2]/button[${landing}]`
+            await this.page.locator(landingSelector).textContent()
+        
+            await this.page.locator(landingSelector).click()
+            await this.page.locator('//div[5]/form/div[2]/div/button/i').click()
+            await this.page.getByRole('button', { name: ' Eliminar' }).click()
+        
+            await this.page.waitForTimeout(2000)
+            const isLandingVisible = await this.page.locator(landingSelector).isVisible()
+            expect(isLandingVisible).toBe(true)
+        }else {
+            test.info().annotations.push({ type: 'info', description: `La opción seleccionada es: "${confirmacion}". No se encontró un landing disponible para eliminar.`})
+        }
+    }
+    
+    async despublicarLanding(confirmacion, landing, test) {
+        if (confirmacion == 'si'){
+            const landingSelector = `//main/div[2]/div/div[2]/button[${landing}]`
+            await this.page.locator(landingSelector).textContent()
+        
+            await this.page.locator(landingSelector).click()
+            await this.page.locator('//div[5]/form/div[2]/div/button/i').click()
+            await this.page.getByRole('button', { name: ' Despublicar' }).click()
+        
+            await this.page.waitForTimeout(2000)
+            const isLandingVisible = await this.page.locator(landingSelector).isVisible()
+            expect(isLandingVisible).toBe(true)
+        }else {
+            test.info().annotations.push({ type: 'info', description: `La opción seleccionada es: "${confirmacion}". No se encontró un landing disponible para eliminar.`})
+        }
     }
 
-    async formularioTourCarouserl(variables){
-        await this.page.locator('div').filter({ hasText: /^Tour carousel$/ }).first().click()
-        await this.page.getByRole('button', { name: 'Agregar', exact: true }).click()
-        await this.page.locator('[id="blocks\\[0\\]\\.title-input"]').fill(variables.tituloCarousel)
+    async crearLanding(){
+        await this.page.locator('//main/div[5]/form/div[2]/button').click()
+        await this.page.waitForTimeout(2000)
     }
 
     async publicarLanding(){
-        await this.page.locator('//form/div[2]/button/span').click()
-        await this.page.waitForTimeout(5000)
+        await this.page.locator('//main/div[5]/form/div[2]/button').click()
+        await this.page.getByRole('link', { name: 'Ver ' }).click()
+        await this.page.waitForTimeout(2000)
     }
 
+    
+
     async validacionCamposVacios(){
-        await this.page.getByRole('link', { name: ' Landings' }).click()
         await this.page.getByLabel('Crear').click()
         await this.page.locator('//form/div[2]/button/span').click()
         await this.page.getByText('El campo title es requerido.').waitFor({ state: 'visible' })
         expect(await this.page.getByText('El campo title es requerido.')).toHaveText('El campo title es requerido.')
         expect(await this.page.getByText('El campo slug es requerido.')).toHaveText('El campo slug es requerido.')
+        expect(await this.page.getByText('El campo banner es requerido.')).toHaveText('El campo banner es requerido.')
     }
 }
 

@@ -9,6 +9,8 @@ const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'))
 dotenv.config()
 
 test.describe('Como automatizador quiero hacer flujos de landings', () => {
+    let opcion = 'no'
+
     test.beforeEach(async ({ page }) => {
         let landing = new landings(page)
         await landing.abrirVistas(variables)
@@ -16,7 +18,7 @@ test.describe('Como automatizador quiero hacer flujos de landings', () => {
     })
 
     test.afterEach(async ({ page }) => {
-        await page.context().cookies(`${process.env.baseUrlMiddle}`)
+        await page.context().cookies(`${process.env.baseUrlWebAdmin}`)
         await page.context().clearCookies()
         await page.close()
     })
@@ -30,45 +32,25 @@ test.describe('Como automatizador quiero hacer flujos de landings', () => {
 
         await test.step('Configurar el banner del landing', async () => {
             await landing.formularioBanner(variables)
-            await landing.publicarLanding()
+            await landing.crearLanding()
         })
         
         await test.step('Verificar la creación del landing en la nueva web', async () => {
-            await landing.ingresoLanding()
+            await landing.publicarLanding()
         })
     })
 
-    test('Creación de landing con componente de texto introductorio', async ({ page }) => {
+    test('eliminar banner de forma exitosa', async ({ page }) => {
         let landing = new landings(page)
-        await test.step('Navegar al formulario de creación de landing', async () => {
-            await landing.formulario(variables)
-            await landing.agregarComponente()
-        })
-
-        await test.step('Configurar el componente de texto introductorio', async () => {
-            await landing.formularioIntroText(variables)
-            await landing.publicarLanding()
-        })
-        
-        await test.step('Verificar la creación del landing en la nueva web', async () => {
-            await landing.ingresoLanding()
+        await test.step('eliminar landing de la forma correcta', async () => {
+            await landing.eliminarLanding(opcion, 1, test)
         })
     })
 
-    test.skip('Creación de landing con el componente de carrusel de tours', async ({ page }) => {
+    test('despublicar banner de forma exitosa', async ({ page }) => {
         let landing = new landings(page)
-        await test.step('Navegar al formulario de creación de landing', async () => {
-            await landing.formulario(variables)
-            await landing.agregarComponente()
-        })
-
-        await test.step('Configurar el componente de carrusel de tours', async () => {
-            await landing.formularioTourCarouserl(variables)
-            await landing.publicarLanding()
-        })
-        
-        await test.step('Verificar la creación del landing en la nueva web', async () => {
-            await landing.ingresoLanding()
+        await test.step('despublicar landing de la forma correcta', async () => {
+            await landing.despublicarLanding(opcion, 1, test)
         })
     })
     
