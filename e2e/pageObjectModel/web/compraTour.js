@@ -12,12 +12,13 @@ export class compraTour{
         await this.page.getByRole('link', { name: 'Iniciar sesión' }).click()
         await this.page.getByPlaceholder('E-mail').fill(variables.email)
         await this.page.getByPlaceholder('Contraseña').fill(variables.password)
-        await this.page.getByRole('button', { name: 'Continuar' }).click()
+        await this.page.getByRole('button', { name: 'Iniciar sesión' }).click()
     }
 
     async seleccionarTouraAndPeriodo(tour, test){
         await this.page.getByRole('link', { name: 'Ver tour' }).nth(tour).click()
-        await this.page.getByRole('button', { name: 'Seleccionar' }).first().hover()
+        await this.page.getByRole('button', { name: 'Reservar mi tour' }).click()
+        //await this.page.getByRole('button', { name: 'Seleccionar' }).first().hover()
         await this.page.getByRole('button', { name: 'Seleccionar' }).first().click()
 
         const alert = this.page.locator('//div/div[2]/div[2]/div/div[1]/a/span')
@@ -28,15 +29,10 @@ export class compraTour{
         }else{
             test.info().annotations.push({ type: 'info', description: 'No se visualizó la alerta de inicio de sesión' })
         }
-    }
-
-    async seleccionarCantidadHabitaciones(personas, habitacion){
         await this.page.getByRole('button', { name: 'Selección de habitaciones ' }).first().waitFor({ state: 'visible' })
-        await this.page.locator('//*[@id="input-number"]/button[2]/i').nth(personas).click()
-        await this.page.locator('//*[@id="input-number"]/button[2]/i').nth(habitacion).click()
     }
 
-    async FormularioPasajeros(formulario, variables){
+    async formularioPasajeros(formulario, variables){
         const nombres = ["Juan", "Ana", "Carlos", "Maria", "Luis", "Sofia", "Miguel", "Elena"]
         const nombreAleatorio = nombres[Math.floor(Math.random() * nombres.length)]
         const numeroAleatorio = Math.floor(1000 + Math.random() * 9000);
@@ -48,15 +44,61 @@ export class compraTour{
         await this.page.locator('//*[@id="reservation-field-name"]').nth(formulario).fill(`${nombreAleatorio}${numeroAleatorio}`)
         await this.page.locator('//*[@id="reservation-field-lastname"]').nth(formulario).fill(variables.apellido)
         await this.page.locator('//*[@id="reservation-field-phone"]').nth(formulario).fill(variables.telefono)
+        await this.page.locator('//*[@id="reservation-field-email"]').nth(formulario).fill(`${nombreAleatorio.toLowerCase()}${numeroAleatorio}@gmail.com`)
+        await this.page.locator('//*[@id="reservation-field-nationality"]').nth(formulario).selectOption(variables.nacionalidad)
         await this.page.locator('//*[@id="reservation-field-sex"]').nth(formulario).selectOption(variables.genero)
         await this.page.locator('//*[@id="reservation-field-birthday"]').nth(formulario).fill(variables.fechaCumpleaños)
-        await this.page.locator('//*[@id="reservation-field-email"]').nth(formulario).fill(`${nombreAleatorio.toLowerCase()}${numeroAleatorio}@gmail.com`)
-        await this.page.locator('//*[@id="reservation-field-confirm-email"]').nth(formulario).check()
-        await this.page.locator('//*[@id="reservation-field-dni"]').nth(formulario).fill(`${numeroDniAleatorio}${letraDni}`);
+        await this.page.locator('//*[@id="reservation-field-dni"]').nth(formulario).fill(`${numeroDniAleatorio}${letraDni}`)
         await this.page.locator('//*[@id="reservation-field-expiration"]').nth(formulario).fill(variables.fechaCaducidad)
         await this.page.locator('//*[@id="reservation-field-issued"]').nth(formulario).fill(variables.fechaExpedicion)
         await this.page.locator('//*[@id="reservation-field-zip"]').nth(formulario).fill(variables.codigoPostal)
+    }
+
+    async formularioNiño(formulario, variables){
+        const nombres = ["Juan", "Ana", "Carlos", "Maria", "Luis", "Sofia", "Miguel", "Elena"]
+        const nombreAleatorio = nombres[Math.floor(Math.random() * nombres.length)]
+        const numeroAleatorio = Math.floor(1000 + Math.random() * 9000)
+
+        const numeroDniAleatorio = Math.floor(10000000 + Math.random() * 90000000)
+        const letrasDni = "TRWAGMYFPDXBNJZSQVHLCKE";
+        const letraDni = letrasDni[numeroDniAleatorio % 23]
+
+        await this.page.getByRole('button', { name: 'Agregar viajero' }).click()
+        await this.page.getByRole('button', { name: ' Niño' }).click()
+        await this.page.locator('//*[@id="reservation-field-name"]').nth(formulario).fill(`${nombreAleatorio}${numeroAleatorio}`)
+        await this.page.locator('//*[@id="reservation-field-lastname"]').nth(formulario).fill(variables.apellido)
         await this.page.locator('//*[@id="reservation-field-nationality"]').nth(formulario).selectOption(variables.nacionalidad)
+        await this.page.locator('//*[@id="reservation-field-sex"]').nth(formulario).selectOption(variables.genero)
+        await this.page.locator('//*[@id="reservation-field-birthday"]').nth(formulario).fill(variables.fechaCumpleaños)
+        await this.page.locator('//*[@id="reservation-field-dni"]').nth(formulario).fill(`${numeroDniAleatorio}${letraDni}`)
+        await this.page.locator('//*[@id="reservation-field-expiration"]').nth(formulario).fill(variables.fechaCaducidad)
+        await this.page.locator('//*[@id="reservation-field-issued"]').nth(formulario).fill(variables.fechaExpedicion)
+    }
+
+    async formularioBebe(formulario, variables){
+        const nombres = ["Juan", "Ana", "Carlos", "Maria", "Luis", "Sofia", "Miguel", "Elena"]
+        const nombreAleatorio = nombres[Math.floor(Math.random() * nombres.length)]
+        const numeroAleatorio = Math.floor(1000 + Math.random() * 9000)
+
+        const numeroDniAleatorio = Math.floor(10000000 + Math.random() * 90000000)
+        const letrasDni = "TRWAGMYFPDXBNJZSQVHLCKE";
+        const letraDni = letrasDni[numeroDniAleatorio % 23]
+
+        await this.page.getByRole('button', { name: 'Agregar viajero' }).click()
+        await this.page.getByRole('button', { name: ' Bebé' }).nth(1).click()
+        await this.page.locator('//*[@id="reservation-field-name"]').nth(formulario).fill(`${nombreAleatorio}${numeroAleatorio}`)
+        await this.page.locator('//*[@id="reservation-field-lastname"]').nth(formulario).fill(variables.apellido)
+        await this.page.locator('//*[@id="reservation-field-nationality"]').nth(formulario).selectOption(variables.nacionalidad)
+        await this.page.locator('//*[@id="reservation-field-sex"]').nth(formulario).selectOption(variables.genero)
+        await this.page.locator('//*[@id="reservation-field-birthday"]').nth(formulario).fill(variables.fechaCumpleaños)
+        await this.page.locator('//*[@id="reservation-field-dni"]').nth(formulario).fill(`${numeroDniAleatorio}${letraDni}`)
+    }
+
+    async seleccionarCantidadHabitaciones(iteracion, personas){
+        //Cuando se arregle el tema de la habitacion se debe revisar este metodo
+        for (let i = 0; i < iteracion; i++) {
+            await this.page.locator('//*[@id="input-number"]/button[2]/i').nth(personas).click();
+        }
     }
 
     async agregarActividad() {
@@ -70,18 +112,27 @@ export class compraTour{
         }
     }
     
+    async agregarVuelos(vuelo){
+        await this.page.waitForTimeout(2000)
+        if(await this.page.getByRole('button', { name: 'Seleccionar' }).nth(vuelo).isVisible()){
+            await this.page.getByRole('button', { name: 'Seleccionar' }).nth(vuelo).click()
+        }else{
+            await this.page.getByRole('button', { name: 'Lo quiero sin vuelos' }).click()
+        }
+    }
+
     async selecionarPlanStandard(){
-        await this.page.locator('//div[2]/div/div/div/div[1]/div[3]/div[2]').click()
+        await this.page.locator('//div[1]/div[3]/div[4]/div/div[1]/div[3]').click()
         await this.page.getByRole('button', { name: 'Continuar' }).click()
     }
 
     async selecionarPlanComfort(){
-        await this.page.locator('//div[2]/div/div/div/div[2]/div[3]/div[2]').click()
+        await this.page.locator('//div/div[1]/div[3]/div[4]/div/div[2]').click()
         await this.page.getByRole('button', { name: 'Continuar' }).click()
     }
 
     async selecionarPlanComfortPlus(){
-        await this.page.locator('//div[2]/div/div/div/div[3]/div[3]/div[2]').click()
+        await this.page.locator('//div/div[1]/div[3]/div[4]/div/div[3]').click()
         await this.page.getByRole('button', { name: 'Continuar' }).click()
     }
     
