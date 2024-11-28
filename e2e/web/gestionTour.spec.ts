@@ -17,7 +17,7 @@ test.describe('Como automatizador quiero hacer flujos de gestion de tour', () =>
     test.afterEach(async ({ page }) => {
         await page.context().cookies(`${process.env.baseUrlWebAdmin}`)
         await page.context().clearCookies()
-        await page.close()
+        //await page.close()
     })
     
     test('Sincronización exitosa de un tour con la plataforma', async ({ page }) => {
@@ -41,16 +41,17 @@ test.describe('Como automatizador quiero hacer flujos de gestion de tour', () =>
     
         await test.step('Seleccionar un tour para edición', async () => {
             await sincronizacion.seleccionarTour(0)
+            await sincronizacion.agregarPrecioTour('si')
             await sincronizacion.edicionTour()
         })
 
         await test.step('Modificar las configuraciones de un periodo', async () => {
-            await sincronizacion.edicionPeriodo(1)
+            await sincronizacion.edicionPeriodo(0)
+            await sincronizacion.tiposPersonasTour()
         })
 
         await test.step('Modificar las configuraciones de habitaciones', async () => {
             await sincronizacion.edicionHabitaciones()
-          
         })
         
         await test.step('Modificar las configuraciones de una actividad', async () => {
@@ -71,7 +72,7 @@ test.describe('Como automatizador quiero hacer flujos de gestion de tour', () =>
         })
 
         await test.step('Verificar campos obligatorios vacíos en el formulario', async () => {
-            await sincronizacion.validacionCamposVaciosPeriodo(1)
+            await sincronizacion.validacionCamposVaciosPeriodo(0)
             await sincronizacion.validacionCamposVaciosHabitacion()
             await sincronizacion.validacionCamposVaciosActividad(test)
             await sincronizacion.validacionCamposVaciosTour()
