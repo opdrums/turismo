@@ -18,7 +18,7 @@ test.describe('como automatizador quiero hacer flujos de reserva', () => {
     test.afterEach(async ({ page }) => {
         await page.context().cookies(`${process.env.baseUrlMiddle}`)
         await page.context().clearCookies()
-        await page.close()
+        //await page.close()
     })
     
     test('Validación de reservas confirmadas', async ({ page }) => {
@@ -56,5 +56,11 @@ test.describe('como automatizador quiero hacer flujos de reserva', () => {
             await reserva.validacionPasajeros(test)
         })
     })
-    
+
+    test('validacion de filtros', async ({ page }) => {
+        const reserva = new reservaTour(page)
+        await test.step('Verificar información de los pasajeros en una reserva', async () => {
+            await reserva.agregarFiltros(test, variables)
+        })
+    })
 })

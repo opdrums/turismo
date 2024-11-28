@@ -43,6 +43,23 @@ class reservaTour{
             throw new Error('Error: La reserva  no contiene pasajeros asociados')
         }
     }
+
+    async agregarFiltros(test, variables){
+        await this.page.getByRole('button', { name: ' Filtros' }).click()
+        await this.page.locator('div').filter({ hasText: /^Desde$/ }).getByPlaceholder('DD/MM/YYYY').fill(variables.fechaInicio)
+        await this.page.locator('div').filter({ hasText: /^Hasta$/ }).getByPlaceholder('DD/MM/YYYY').fill(variables.fechaFinal)
+        await this.page.getByPlaceholder('Buscar filtros...').fill('dif')
+        await this.page.locator('//div[2]/div/div/div[3]/div/button[1]').click()
+        await this.page.getByRole('button', { name: 'Aplicar' }).click()
+        await this.page.waitForTimeout(2000)
+
+        if (await this.page.locator('//div/div[2]/div[2]/div/div[2]/div[3]').isVisible()) {
+            test.info().annotations.push({type: 'Info',description: "Se visualizan reservas con los filtros seleccionados"})
+        } else {
+            test.info().annotations.push({type: 'Info',description: "No Se visualizan reservas con los filtros seleccionados"})
+            throw new Error('Error: No Se visualizan reservas con los filtros seleccionados')
+        }   
+    }
 }
 
 export default reservaTour;
