@@ -1,6 +1,5 @@
 import * as dotenv from 'dotenv';
 import { expect } from '@playwright/test';
-import { console } from 'inspector';
 dotenv.config();
 
 export class colecciones {
@@ -63,7 +62,7 @@ export class colecciones {
         await view1.getByRole('link', { name: ' Colecciones' }).click();
         await view1.getByRole('button', { name: `${this.tituloColeccion}`}).click();
         await view1.getByRole('link', { name: 'Ver' }).click();
-        await view1.close()
+        await view1.close();
     }
 
     async validacionTour(context) {
@@ -71,51 +70,62 @@ export class colecciones {
             context.waitForEvent('page'),
         ]);
         await view2.locator('//div/div/section/div/div/div[1]/div[3]/div[1]').waitFor({ state: 'visible' });
-        await view2.locator('//div/div/section/div/div/div[1]/div[3]/div[1]').scrollIntoViewIfNeeded()
+        await view2.locator('//div/div/section/div/div/div[1]/div[3]/div[1]').scrollIntoViewIfNeeded();
         expect(await view2.locator('//div/div/section/div/div/div[1]/div[3]/div[1]')).toHaveText(`${this.tituloTour.toUpperCase()}`);
-        await view2.close()
+        
+        const textoCompleto = await view2.locator('//div/div[1]/div[2]/div/span[2]').nth(0).textContent(); 
+        const precio = textoCompleto.match(/\d+/)?.[0];
+        if (precio > 0) {
+            await view2.getByRole('link', { name: 'Ver tour' }).click();
+            await view2.locator('//div/div[1]/div[3]/p').nth(1).waitFor({ state: 'visible' });
+            expect(await view2.locator('//div/div[1]/div[3]/p').nth(1)).toBeVisible();
+        } else {
+            test.info().annotations.push({ type: 'info', description: 'el tour no contiene precios' });
+            throw new Error('Error: el tour no contiene precios');
+        }
+        await view2.close();
     }
 
     async eliminarColeccion(confirmacion, coleccion, test) {
         if (confirmacion == 'si'){
-            const coleccionSelector = `//main/div[2]/div/div[2]/button[${coleccion}]`
-            await this.page.locator(coleccionSelector).textContent()
+            const coleccionSelector = `//main/div[2]/div/div[2]/button[${coleccion}]`;
+            await this.page.locator(coleccionSelector).textContent();
         
-            await this.page.locator(coleccionSelector).click()
-            await this.page.locator('//div[5]/form/div[2]/div/button/i').click()
-            await this.page.getByRole('button', { name: ' Eliminar' }).click()
+            await this.page.locator(coleccionSelector).click();
+            await this.page.locator('//div[5]/form/div[2]/div/button/i').click();
+            await this.page.getByRole('button', { name: ' Eliminar' }).click();
         
             await this.page.waitForTimeout(2000)
-            const isColeccionVisible = await this.page.locator(coleccionSelector).isVisible()
-            expect(isColeccionVisible).toBe(true)
+            const isColeccionVisible = await this.page.locator(coleccionSelector).isVisible();
+            expect(isColeccionVisible).toBe(true);
         }else {
-            test.info().annotations.push({ type: 'info', description: `La opción seleccionada es: "${confirmacion}". No se encontró una coleccion disponible para eliminar.`})
+            test.info().annotations.push({ type: 'info', description: `La opción seleccionada es: "${confirmacion}". No se encontró una coleccion disponible para eliminar.`});
         }
     }
     
     async despublicarColeccion(confirmacion, coleccion, test) {
         if (confirmacion == 'si'){
-            const coleccionSelector = `//main/div[2]/div/div[2]/button[${coleccion}]`
-            await this.page.locator(coleccionSelector).textContent()
+            const coleccionSelector = `//main/div[2]/div/div[2]/button[${coleccion}]`;
+            await this.page.locator(coleccionSelector).textContent();
         
-            await this.page.locator(coleccionSelector).click()
-            await this.page.locator('//div[5]/form/div[2]/div/button/i').click()
-            await this.page.getByRole('button', { name: ' Despublicar' }).click()
+            await this.page.locator(coleccionSelector).click();
+            await this.page.locator('//div[5]/form/div[2]/div/button/i').click();
+            await this.page.getByRole('button', { name: ' Despublicar' }).click();
         
-            await this.page.waitForTimeout(2000)
-            const isColeccionVisible = await this.page.locator(coleccionSelector).isVisible()
-            expect(isColeccionVisible).toBe(true)
+            await this.page.waitForTimeout(2000);
+            const isColeccionVisible = await this.page.locator(coleccionSelector).isVisible();
+            expect(isColeccionVisible).toBe(true);
         }else {
-            test.info().annotations.push({ type: 'info', description: `La opción seleccionada es: "${confirmacion}". No se encontró una coleccion disponible para eliminar.`})
+            test.info().annotations.push({ type: 'info', description: `La opción seleccionada es: "${confirmacion}". No se encontró una coleccion disponible para eliminar.`});
         }
     }
 
     async validacionCamposVacios(){
         await this.page.getByLabel('Crear').click();
         await this.page.getByRole('button', { name: 'Crear' }).nth(1).click();
-        expect(await this.page.getByText('El campo title es requerido.')).toHaveText('El campo title es requerido.')
-        expect(await this.page.getByText('El campo slug es requerido.')).toHaveText('El campo slug es requerido.')
-        expect(await this.page.getByText('El campo tag es requerido.')).toHaveText('El campo tag es requerido.')
+        expect(await this.page.getByText('El campo title es requerido.')).toHaveText('El campo title es requerido.');
+        expect(await this.page.getByText('El campo slug es requerido.')).toHaveText('El campo slug es requerido.');
+        expect(await this.page.getByText('El campo tag es requerido.')).toHaveText('El campo tag es requerido.');
     }
 }
 

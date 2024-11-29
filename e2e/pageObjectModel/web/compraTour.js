@@ -17,10 +17,17 @@ export class compraTour{
 
     async seleccionarTouraAndPeriodo(tour, test){
         await this.page.getByRole('link', { name: 'Ver tour' }).nth(tour).click()
-        await this.page.getByRole('button', { name: 'Reservar mi tour' }).click()
-        //await this.page.getByRole('button', { name: 'Seleccionar' }).first().hover()
-        await this.page.getByRole('button', { name: 'Seleccionar' }).first().click()
+        const textoCompleto = await this.page.locator('//div/div[1]/div[3]/p').nth(1).textContent(); 
+        const precio = textoCompleto.match(/\d+/)?.[0];
 
+        if (precio > 0) {
+            await this.page.getByRole('button', { name: 'Reservar mi tour' }).click()
+            await this.page.getByRole('button', { name: 'Seleccionar' }).first().click()
+        } else {
+            test.info().annotations.push({ type: 'info', description: 'el tour no contiene precios' })
+            throw new Error('Error: el tour no contiene precios')
+        }
+     
         const alert = this.page.locator('//div/div[2]/div[2]/div/div[1]/a/span')
         if(await alert.isVisible()){
             await this.page.getByLabel('Cerrar').click()

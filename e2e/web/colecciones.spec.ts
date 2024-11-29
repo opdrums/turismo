@@ -13,7 +13,7 @@ test.describe('Automatización de flujos para colecciones', () => {
     let accion = 'no';
 
     test.afterEach(async ({ page }) => {
-        await page.close();
+        //await page.close();
     });
     
     test('Crear una colección exitosamente y visualizar el tour', async ({ page }) => {       
@@ -45,7 +45,7 @@ test.describe('Automatización de flujos para colecciones', () => {
         await test.step('Validar que el tour fue agregado a la colección', async () => {
             await coleccion.visualizarTour(view1);   
             await coleccion.validacionTour(context);
-        });
+        });        
     });
 
     test('Eliminar una colección', async ({ page }) => {
