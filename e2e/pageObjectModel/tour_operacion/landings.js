@@ -66,6 +66,7 @@ export class landings {
             await this.page.locator(landingSelector).click()
             await this.page.locator('//div[5]/form/div[2]/div/button/i').click()
             await this.page.getByRole('button', { name: ' Eliminar' }).click()
+            await this.page.getByRole('button', { name: 'Eliminar', exact: true }).click()
         
             await this.page.waitForTimeout(2000)
             const isLandingVisible = await this.page.locator(landingSelector).isVisible()

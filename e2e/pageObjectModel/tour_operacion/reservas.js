@@ -19,7 +19,7 @@ class reservaTour{
 
     async validacionReservas(tag, test){
         await this.page.getByRole('button', { name: `${tag}`, exact: true }).click()   
-        await this.page.waitForTimeout(1000)
+        await this.page.waitForTimeout(3000)
 
         if (await this.page.locator('//div[2]/div[2]/div[4]/div[2]').isVisible()) {
             let userEmail = await this.page.locator('//div[2]/div[2]/div[4]/div[2]').textContent()

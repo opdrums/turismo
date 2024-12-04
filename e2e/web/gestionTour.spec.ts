@@ -17,7 +17,7 @@ test.describe('Como automatizador quiero hacer flujos de gestion de tour', () =>
     test.afterEach(async ({ page }) => {
         await page.context().cookies(`${process.env.baseUrlWebAdmin}`)
         await page.context().clearCookies()
-        //await page.close()
+        await page.close()
     })
     
     test('Sincronización exitosa de un tour con la plataforma', async ({ page }) => {

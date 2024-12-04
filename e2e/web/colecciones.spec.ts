@@ -10,10 +10,10 @@ const variables = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 dotenv.config();
 
 test.describe('Automatización de flujos para colecciones', () => {
-    let accion = 'no';
+    let accion = 'si';
 
     test.afterEach(async ({ page }) => {
-        //await page.close();
+        await page.close();
     });
     
     test('Crear una colección exitosamente y visualizar el tour', async ({ page }) => {       

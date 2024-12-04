@@ -14,6 +14,7 @@ test.describe('como automatizador quiero validar el flujo de registro de usuario
     test.afterEach(async ({ page }) => {
         await page.context().cookies(`${process.env.baseUrlWeb}`)
         await page.context().clearCookies()
+        await page.close()
     })
 
     test('Registro de usuario exitoso', async ({page}) => {
@@ -104,7 +105,7 @@ test.describe('como automatizador quiero validar el flujo de registro de usuario
             await page.getByPlaceholder('Nombre').fill(variables.nombre)
             await page.getByPlaceholder('Apellidos').fill(variables.apellido)
             await page.getByPlaceholder('Telefono').fill(variables.telefonoIncorrecto)
-            await page.getByRole('button', { name: 'Registrarme' }).click()
+            await page.locator('//div[1]/div[3]/form/button').click()
             expect(page.getByText('Número de teléfono')).toContainText('Número de teléfono inválido')
         })
     })
@@ -123,7 +124,7 @@ test.describe('como automatizador quiero validar el flujo de registro de usuario
             await page.getByPlaceholder('Nombre').fill(variables.nombre)
             await page.getByPlaceholder('Apellidos').fill(variables.apellido)
             await page.getByPlaceholder('Telefono').fill(variables.telefono)
-            await page.getByRole('button', { name: 'Registrarme' }).click()
+            await page.locator('//div[1]/div[3]/form/button').click()
             await page.getByText('User already exists').waitFor({ state: 'visible' })
             expect(page.getByText('User already exists')).toContainText('User already exists')
         })

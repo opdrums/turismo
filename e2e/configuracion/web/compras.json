@@ -14,5 +14,10 @@
     "nacionalidad": "España",
     "cardNumber": "4918019160034602",
     "cardExpiration": "1234",
-    "cardCvv": "123"
+    "cardCvv": "123",
+    "cardCvvFallido": "999",
+    "libroDeFamilia": "family-book",
+    "opcionDni": "dni",
+    "opcionPasaporte": "passport",
+    "numeroPasaporte": "1234567894"
 }

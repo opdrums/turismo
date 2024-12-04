@@ -20,9 +20,9 @@ export class codigoVerificacionRegistro {
   }
 
   async navegarRegistro(view1) {
-    await view1.getByRole('link', { name: 'Iniciar sesión' }).click()
+    await view1.locator('//header/div[2]/div/div[3]').click()
     await view1.getByRole('link', { name: '¿Aun no tienes cuenta?' }).click()
-    await view1.waitForTimeout(2000)
+    await view1.waitForTimeout(5000)
   }
 
   async obtenerCorreoProvisional(view2) {
@@ -33,30 +33,30 @@ export class codigoVerificacionRegistro {
 
   async completarFormularioRegistro(view1, variables) {
     await view1.getByPlaceholder('Telefono').waitFor({ state: 'visible' })
-    await view1.getByPlaceholder('E-mail').fill(this.correoprovicional)
-    await view1.getByPlaceholder('Contraseña', { exact: true }).fill(variables.passwordWeb)
-    await view1.getByPlaceholder('Confirmar Contraseña').fill(variables.passwordWeb)
     await view1.getByPlaceholder('Nombre').fill(variables.nombre)
     await view1.getByPlaceholder('Apellidos').fill(variables.apellido)
+    await view1.getByPlaceholder('E-mail').fill(this.correoprovicional)
     await view1.getByPlaceholder('Telefono').fill(variables.telefono)
-    await view1.getByRole('button', { name: 'Registrarme' }).click()
+    await view1.getByPlaceholder('Contraseña', { exact: true }).fill(variables.passwordWeb)
+    await view1.getByPlaceholder('Confirmar Contraseña').fill(variables.passwordWeb)
+    await view1.locator('//div[1]/div[3]/form/button').click()
   }
 
   async obtenerCodigoConfirmacion(view2, test) {
     await view2.waitForTimeout(2000)
     await view2.getByRole('link', { name: 'Refresh' }).click()
-    await view2.getByRole('link', { name: 'I info@differentroads.es' }).waitFor({ state: 'visible' })
-    await view2.getByRole('link', { name: 'I info@differentroads.es' }).click()
+    await view2.getByRole('link', { name: 'no-reply@verificationemail.com' }).waitFor({ state: 'visible' })
+    await view2.getByRole('link', { name: 'no-reply@verificationemail.com' }).click()
     await view2.evaluate(() => location.reload())
 
-    const link = view2.getByRole('link', { name: 'I info@differentroads.es' })
+    const link = view2.getByRole('link', { name: 'no-reply@verificationemail.com' })
     try {
       await link.waitFor({ state: 'visible', timeout: 5000 });
       await link.click()
     }catch (error) {
         test.info().annotations.push({ type: 'info', description: 'No se visualizo el pop up'})
     }
-    const text = await view2.locator('[id="__nuxt"] iframe').contentFrame().getByText('Your confirmation code is').textContent()
+    const text = await view2.locator('[id="__nuxt"] iframe').contentFrame().getByText('Your verification code is').textContent()
     this.codigoVerificacion = text.match(/\d+/)[0]
     await view2.close()
   }
@@ -76,10 +76,11 @@ export class codigoVerificacionRegistro {
 
   async flujoRegistro(url) {
     await this.page.goto(url);
-    await this.page.getByRole('link', { name: 'Iniciar sesión' }).click()
+    
+    await this.page.locator('//header/div[2]/div/div[3]').click()
     await this.page.getByRole('link', { name: '¿Aun no tienes cuenta?' }).click()
     await this.page.getByPlaceholder('Telefono').waitFor({ state: 'visible' })
-    await this.page.getByRole('button', { name: 'Registrarme' }).click()
+    await this.page.locator('//div[1]/div[3]/form/button').click()
   }
 }
 

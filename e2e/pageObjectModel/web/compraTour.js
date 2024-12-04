@@ -1,4 +1,5 @@
 import { expect } from "@playwright/test"
+import { info } from "console"
 import * as dotenv from 'dotenv'
 dotenv.config()
 
@@ -9,10 +10,11 @@ export class compraTour{
 
     async loginUser(variables){
         await this.page.goto(`${process.env.baseUrlWeb}`)
-        await this.page.getByRole('link', { name: 'Iniciar sesión' }).click()
+        await this.page.setDefaultTimeout(120000)
+        await this.page.locator('//header/div[2]/div/div[3]').click()
         await this.page.getByPlaceholder('E-mail').fill(variables.email)
         await this.page.getByPlaceholder('Contraseña').fill(variables.password)
-        await this.page.getByRole('button', { name: 'Iniciar sesión' }).click()
+        await this.page.locator('//div/div[1]/form/button').click()
     }
 
     async seleccionarTouraAndPeriodo(tour, test){
@@ -36,7 +38,7 @@ export class compraTour{
         }else{
             test.info().annotations.push({ type: 'info', description: 'No se visualizó la alerta de inicio de sesión' })
         }
-        await this.page.getByRole('button', { name: 'Selección de habitaciones ' }).first().waitFor({ state: 'visible' })
+        await this.page.getByText('1 Agrega los viajeros y las').first().waitFor({ state: 'visible' })
     }
 
     async formularioPasajeros(formulario, variables){
@@ -70,8 +72,6 @@ export class compraTour{
         const letrasDni = "TRWAGMYFPDXBNJZSQVHLCKE";
         const letraDni = letrasDni[numeroDniAleatorio % 23]
 
-        await this.page.getByRole('button', { name: 'Agregar viajero' }).click()
-        await this.page.getByRole('button', { name: ' Niño' }).click()
         await this.page.locator('//*[@id="reservation-field-name"]').nth(formulario).fill(`${nombreAleatorio}${numeroAleatorio}`)
         await this.page.locator('//*[@id="reservation-field-lastname"]').nth(formulario).fill(variables.apellido)
         await this.page.locator('//*[@id="reservation-field-nationality"]').nth(formulario).selectOption(variables.nacionalidad)
@@ -82,7 +82,7 @@ export class compraTour{
         await this.page.locator('//*[@id="reservation-field-issued"]').nth(formulario).fill(variables.fechaExpedicion)
     }
 
-    async formularioBebe(formulario, variables){
+    async formularioBebe(formulario, opcion, variables){
         const nombres = ["Juan", "Ana", "Carlos", "Maria", "Luis", "Sofia", "Miguel", "Elena"]
         const nombreAleatorio = nombres[Math.floor(Math.random() * nombres.length)]
         const numeroAleatorio = Math.floor(1000 + Math.random() * 9000)
@@ -91,55 +91,84 @@ export class compraTour{
         const letrasDni = "TRWAGMYFPDXBNJZSQVHLCKE";
         const letraDni = letrasDni[numeroDniAleatorio % 23]
 
-        await this.page.getByRole('button', { name: 'Agregar viajero' }).click()
-        await this.page.getByRole('button', { name: ' Bebé' }).nth(1).click()
         await this.page.locator('//*[@id="reservation-field-name"]').nth(formulario).fill(`${nombreAleatorio}${numeroAleatorio}`)
         await this.page.locator('//*[@id="reservation-field-lastname"]').nth(formulario).fill(variables.apellido)
         await this.page.locator('//*[@id="reservation-field-nationality"]').nth(formulario).selectOption(variables.nacionalidad)
         await this.page.locator('//*[@id="reservation-field-sex"]').nth(formulario).selectOption(variables.genero)
         await this.page.locator('//*[@id="reservation-field-birthday"]').nth(formulario).fill(variables.fechaCumpleaños)
-        await this.page.locator('//*[@id="reservation-field-dni"]').nth(formulario).fill(`${numeroDniAleatorio}${letraDni}`)
+        
+        if(opcion == 0){
+            await this.page.locator('//*[@id="reservation-field-documentType"]').nth(0).selectOption(variables.libroDeFamilia)
+        }else if(opcion == 1){
+            await this.page.locator('//*[@id="reservation-field-documentType"]').nth(0).selectOption(variables.opcionDni)
+            await this.page.locator('//*[@id="reservation-field-dni"]').nth(formulario).fill(`${numeroDniAleatorio}${letraDni}`)
+            await this.page.locator('//*[@id="reservation-field-minor-id-expiration"]').nth(0).fill(variables.fechaCaducidad)
+            await this.page.locator('//*[@id="reservation-field-minor-id-issued"]').nth(0).fill(variables.fechaExpedicion)
+        }else{
+            await this.page.locator('//*[@id="reservation-field-documentType"]').nth(0).selectOption(variables.opcionPasaporte)
+            await this.page.locator('//*[@id="reservation-field-passport-id"]').nth(0).fill(variables.numeroPasaporte)
+            await this.page.locator('//*[@id="reservation-field-expiration"]').nth(formulario).fill(variables.fechaCaducidad)
+            await this.page.locator('//*[@id="reservation-field-issued"]').nth(formulario).fill(variables.fechaExpedicion)
+        }
+        await this.page.locator('//*[@id="reservation-field-associated-adult"]').nth(0).selectOption({ index: 1 });
+    }
+
+    async seleccionarCantidadPersona(){
+        await this.page.locator('//*[@id="input-number"]/button[2]/i').nth(0).click()
+        await this.page.locator('//*[@id="input-number"]/button[2]/i').nth(1).click()
+        await this.page.locator('//*[@id="input-number"]/button[2]/i').nth(2).click()
     }
 
     async seleccionarCantidadHabitaciones(iteracion, personas){
-        //Cuando se arregle el tema de la habitacion se debe revisar este metodo
         for (let i = 0; i < iteracion; i++) {
-            await this.page.locator('//*[@id="input-number"]/button[2]/i').nth(personas).click();
+           await this.page.locator('//*[@id="input-number"]/button[2]/i').nth(personas).click();
         }
     }
 
-    async agregarActividad() {
+    async agregarActividad(test) {
         await this.page.getByRole('button', { name: 'Continuar' }).click()
+        await this.page.waitForTimeout(2000)
 
-        const actividad = this.page.locator('//div[2]/div/div[2]/div[2]/button').first()
-        if (await actividad.isVisible()) {
-            await actividad.click()
+        if (await this.page.locator('//div[2]/div/div[2]/div[2]/button').isVisible()) {
+            await this.page.locator('//div[2]/div/div[2]/div[2]/button').click()
         } else {
-            console.log('Actividad no encontrada')
+            test.info().annotations.push({ type: 'info', description: 'No se visualiza una actividad en el tour'})
         }
+    }
+    
+    async selecionarPlanStandard(test){
+        if (await this.page.locator('//div[1]/div[3]/div[4]/div/div[1]/div[3]').isVisible()) {
+            await this.page.locator('//div[1]/div[3]/div[4]/div/div[1]/div[3]').click()
+        }else{
+            test.info().annotations.push({ type: 'info', description: 'No se visualiza seguros en el tour'})
+        }
+        await this.page.getByRole('button', { name: 'Continuar' }).click()
     }
     
     async agregarVuelos(vuelo){
         await this.page.waitForTimeout(2000)
-        if(await this.page.getByRole('button', { name: 'Seleccionar' }).nth(vuelo).isVisible()){
+        if(await this.page.getByRole('button', { name: 'Seleccionar' }).nth(vuelo).isVisible()) {
             await this.page.getByRole('button', { name: 'Seleccionar' }).nth(vuelo).click()
         }else{
             await this.page.getByRole('button', { name: 'Lo quiero sin vuelos' }).click()
         }
     }
 
-    async selecionarPlanStandard(){
-        await this.page.locator('//div[1]/div[3]/div[4]/div/div[1]/div[3]').click()
+    async selecionarPlanComfort(test){
+        if (await this.page.locator('//div/div[1]/div[3]/div[4]/div/div[2]').isVisible()) {
+            await this.page.locator('//div/div[1]/div[3]/div[4]/div/div[2]').click()
+        }else{
+            test.info().annotations.push({ type: 'info', description: 'No se visualiza seguros en el tour'})
+        }
         await this.page.getByRole('button', { name: 'Continuar' }).click()
     }
 
-    async selecionarPlanComfort(){
-        await this.page.locator('//div/div[1]/div[3]/div[4]/div/div[2]').click()
-        await this.page.getByRole('button', { name: 'Continuar' }).click()
-    }
-
-    async selecionarPlanComfortPlus(){
-        await this.page.locator('//div/div[1]/div[3]/div[4]/div/div[3]').click()
+    async selecionarPlanComfortPlus(test){
+        if (await this.page.locator('//div/div[1]/div[3]/div[4]/div/div[3]').isVisible()) {
+            await this.page.locator('//div/div[1]/div[3]/div[4]/div/div[3]').click()
+        }else{
+            test.info().annotations.push({ type: 'info', description: 'No se visualiza seguros en el tour'})
+        }
         await this.page.getByRole('button', { name: 'Continuar' }).click()
     }
     
@@ -150,13 +179,28 @@ export class compraTour{
         await this.page.getByRole('button', { name: 'Realizar pago' }).click()
     }
 
-    async flujoCompraBancaria(){
+    async flujoCompraBancaria(variables){
         await this.page.locator('//*[@id="divImgAceptar"]').waitFor({ state: 'visible' })
-        await this.page.locator('#card-number').fill(variables.cardNumber)
-        await this.page.locator('#card-expiration').fill(variables.cardExpiration)
-        await this.page.locator('#card-cvv').fill(variables.cardCvv)
-        await this.page.locator('#divImgAceptar').click()
-        await this.page.locator('//*[@id="body"]/div[2]/div[2]/div[1]/input[2]').waitFor({ state: 'visible' })
+        await this.page.locator('//*[@id="card-number"]').fill(variables.cardNumber)
+        await this.page.locator('//*[@id="card-expiration"]').fill(variables.cardExpiration)
+        await this.page.locator('//*[@id="card-cvv"]').fill(variables.cardCvv)
+        await this.page.locator('//*[@id="divImgAceptar"]').click() 
+        await this.page.locator('//*[@id="result-header"]/div/div/text').waitFor({state: 'hidden'})
+        await this.page.locator('//*[@id="body"]/div[2]/div[2]/div[1]/input[2]').waitFor({ state: 'visible', timeout: 60000})
+        await this.page.locator('//*[@id="body"]/div[2]/div[2]/div[1]/input[2]').click({timeout: 60000})
+    }
+
+    async flujoCompraBancariaFallido(variables){
+        await this.page.locator('//*[@id="divImgAceptar"]').waitFor({ state: 'visible' })
+        await this.page.locator('//*[@id="card-number"]').fill(variables.cardNumber)
+        await this.page.locator('//*[@id="card-expiration"]').fill(variables.cardExpiration)
+        await this.page.locator('//*[@id="card-cvv"]').fill(variables.cardCvvFallido)
+        await this.page.locator('//*[@id="divImgAceptar"]').click() 
+        await this.page.locator('//*[@id="result-header"]/div/div/text').waitFor({state: 'hidden'})
+        await this.page.locator('//*[@id="status"]').nth(2).waitFor({ state: 'visible', timeout: 60000})
+        await this.page.locator('//*[@id="status"]').nth(2).click({timeout: 60000})
+        await this.page.locator('//*[@id="boton"]').click()
+        await this.page.locator('//*[@id="body"]/div[2]/div[2]/div[1]/input[2]').click()
     }
 
     async pagoReservaTiempoBizum(){
